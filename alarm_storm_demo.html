@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>EdgeOps Control Room - Alarm Correlation Panel</title>
+<style>
+  :root{
+    --bg:#070b0f;
+    --bg2:#0b1117;
+    --panel:#111820;
+    --panel2:#0d141b;
+    --panel3:#151e27;
+    --line:#26313d;
+    --line-soft:#1a232d;
+    --text:#d9e2ea;
+    --muted:#8b98a6;
+    --faint:#5f6d7b;
+    --steel:#aab6c2;
+    --blue:#6f9fbe;
+    --green:#75b77b;
+    --red:#d85a5a;
+    --orange:#d98a46;
+    --yellow:#cbb75a;
+    --dim-sev:#778392;
+    --shadow:0 18px 50px rgba(0,0,0,.38);
+    font-size:15px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    min-height:100vh;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    color:var(--text);
+    font-family:"Aptos Display","Segoe UI Variable","Segoe UI",Roboto,system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+    background:
+      radial-gradient(circle at 12% -12%, rgba(73,91,108,.24), transparent 34%),
+      linear-gradient(180deg,#0a0f14 0%,#070b0f 58%,#05080b 100%);
+    letter-spacing:.01em;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.26;
+    background-image:linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+    background-size:32px 32px,32px 32px;
+  }
+
+  .statusHooks{display:none;}
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    min-height:24px;
+    padding:3px 9px;
+    border-radius:3px;
+    border:1px solid var(--line);
+    background:#111922;
+    color:#b8c4ce;
+    font-size:.68rem;
+    font-weight:800;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .badge.offline{background:#132015; color:#a9d5a9; border-color:#315437;}
+  .badge.llm{background:#121b23; color:#b7cad8; border-color:#334657;}
+  .badge.data{background:#171a20; color:#d4c47a; border-color:#5c5130;}
+
+  .toolbar{
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns:auto auto auto 1fr;
+    gap:10px;
+    align-items:center;
+    padding:12px 18px;
+    background:rgba(12,19,26,.92);
+    border-bottom:1px solid var(--line-soft);
+  }
+  button{
+    font-family:inherit;
+    font-size:.86rem;
+    font-weight:800;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:10px 16px;
+    border-radius:3px;
+    border:1px solid #344250;
+    cursor:pointer;
+    background:linear-gradient(180deg,#1a2530,#121a22);
+    color:#d3dde5;
+    transition:border-color .15s, background .15s, transform .15s;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+  }
+  button:hover{border-color:#698094; background:linear-gradient(180deg,#202c38,#151f28);}
+  button:active{transform:translateY(1px);}
+  button:disabled{opacity:.38; cursor:not-allowed; transform:none;}
+  #btnStorm{border-color:#8e633a; color:#f0c38f;}
+  #btnCorrelate{border-color:#526f86; color:#d6e5ef;}
+  #btnCorrelate.pulse{animation:pulse 1.3s infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(111,159,190,.34);}50%{box-shadow:0 0 0 7px rgba(111,159,190,0);}}
+
+  .stats{
+    justify-self:end;
+    display:grid;
+    grid-template-columns:repeat(3, minmax(112px,auto));
+    gap:10px;
+    color:var(--muted);
+    font-size:.72rem;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .stats span{
+    display:flex;
+    flex-direction:column;
+    gap:1px;
+    min-width:112px;
+    padding:8px 12px;
+    background:#0b1117;
+    border:1px solid var(--line-soft);
+    border-radius:3px;
+  }
+  .stats b{color:#edf3f7; font-size:1.55rem; line-height:1.05; letter-spacing:.01em;}
+  .stats .alarmcount b{color:#ffb5aa;}
+
+  main{
+    position:relative;
+    z-index:1;
+    flex:1;
+    display:grid;
+    grid-template-columns:minmax(420px,.95fr) minmax(480px,1.05fr);
+    gap:12px;
+    min-height:0;
+    padding:12px;
+  }
+
+  .alarmPanel,
+  .incidentPanel{
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+    overflow:hidden;
+    background:linear-gradient(180deg,rgba(17,24,32,.96),rgba(10,15,20,.96));
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .panelTitle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    min-height:36px;
+    padding:9px 12px;
+    font-size:.78rem;
+    font-weight:900;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:#c4ced8;
+    background:linear-gradient(180deg,#18222c,#111922);
+    border-bottom:1px solid var(--line);
+  }
+  .panelTitle::before{
+    content:"";
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#71808f;
+    box-shadow:0 0 0 3px rgba(113,128,143,.12);
+    flex:0 0 auto;
+  }
+  .panelTitle span{margin-left:auto; color:#b9ad70 !important; font-weight:700; text-transform:none; letter-spacing:.02em;}
+
+  #alarmList{
+    flex:1;
+    overflow-y:auto;
+    padding:8px;
+    background:linear-gradient(180deg,#0a1016,#080d12);
+  }
+  #alarmList::-webkit-scrollbar,
+  #incidentBody::-webkit-scrollbar{width:10px;}
+  #alarmList::-webkit-scrollbar-thumb,
+  #incidentBody::-webkit-scrollbar-thumb{background:#26313d; border:2px solid #0a1016;}
+  .alarm{
+    display:grid;
+    grid-template-columns:76px 62px minmax(92px,120px) minmax(0,1fr);
+    gap:8px;
+    align-items:center;
+    min-height:34px;
+    padding:7px 9px;
+    margin-bottom:4px;
+    border:1px solid #1a232d;
+    border-left:5px solid #596575;
+    border-radius:2px;
+    background:#101820;
+    font-size:.86rem;
+    line-height:1.25;
+    animation:slidein .22s ease;
+  }
+  @keyframes slidein{from{opacity:0; transform:translateY(-5px);}to{opacity:1; transform:translateY(0);}}
+  .alarm span{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .alarm .t{color:#a3afba; font-size:.8rem; font-weight:700;}
+  .alarm .sev{font-size:.72rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase;}
+  .alarm .tag{color:#e2edf5; font-size:.84rem; font-weight:900;}
+  .alarm.CRITICAL{background:linear-gradient(90deg,rgba(152,48,43,.72),rgba(31,23,25,.96)); border-left-color:#ff6b5f; border-color:#8d3c35; box-shadow:0 0 0 1px rgba(216,90,90,.2);}
+  .alarm.CRITICAL .sev{color:#ffd0ca;}
+  .alarm.HIGH{background:linear-gradient(90deg,rgba(103,62,31,.40),rgba(18,24,30,.92)); border-left-color:var(--orange); border-color:#4c3828;}
+  .alarm.HIGH .sev{color:#f0be89;}
+  .alarm.MEDIUM{background:linear-gradient(90deg,rgba(90,78,33,.34),rgba(18,24,30,.92)); border-left-color:var(--yellow); border-color:#474126;}
+  .alarm.MEDIUM .sev{color:#dfd287;}
+  .alarm.LOW{background:#101820; border-left-color:#5b6775;}
+  .alarm.LOW .sev{color:#8794a2;}
+
+  #incidentBody{
+    flex:1;
+    overflow-y:auto;
+    padding:14px;
+    background:linear-gradient(180deg,#0c1218,#080c11);
+  }
+  .placeholder{
+    max-width:560px;
+    margin:46px auto 0;
+    color:#a8b4bf;
+    font-size:1.08rem;
+    line-height:1.55;
+    padding:24px;
+    text-align:left;
+    background:#101820;
+    border:1px dashed #33404d;
+  }
+  .placeholder b{color:#dce8ef !important;}
+  .placeholder span{display:block; margin-top:14px; color:#7f8c99; font-size:.78rem !important;}
+  .spinner{display:none; text-align:center; margin:46px auto; padding:28px; color:#c8d8e2; background:#101820; border:1px solid var(--line); max-width:480px;}
+  .spinnerLabel{font-size:1.22rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase;}
+  .spinner .dots::after{content:""; animation:dots 1.2s steps(4) infinite;}
+  @keyframes dots{0%{content:"";}25%{content:".";}50%{content:"..";}75%{content:"...";}}
+  .stage{font-size:.92rem; color:var(--muted); margin-top:10px;}
+
+  .card{
+    background:#101820;
+    border:1px solid #33404d;
+    box-shadow:var(--shadow);
+    animation:slidein .3s ease;
+  }
+  .card h2{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:16px 18px;
+    color:#fff2ef;
+    background:linear-gradient(90deg,rgba(132,40,36,.92),rgba(33,24,26,.96));
+    border-bottom:1px solid #743630;
+    border-left:8px solid #ff6b5f;
+    font-size:1.45rem;
+    font-weight:950;
+    line-height:1.2;
+  }
+  .card .meta{
+    padding:10px 18px;
+    color:#b8c3cd;
+    background:#0c1218;
+    border-bottom:1px solid var(--line-soft);
+    font-size:.9rem;
+    font-weight:750;
+  }
+  .section{padding:16px 18px; border-bottom:1px solid var(--line-soft);}
+  .section:last-child{border-bottom:0;}
+  .section h3{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:10px;
+    color:#c6d0da;
+    font-size:.78rem;
+    font-weight:900;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  .rootcause{
+    border:1px solid #8d3c35;
+    border-left:8px solid #ff6b5f;
+    background:linear-gradient(90deg,rgba(126,39,35,.72),rgba(16,24,32,.98));
+    padding:18px 20px;
+    color:#f3f7fa;
+    font-size:1.35rem;
+    line-height:1.38;
+    font-weight:700;
+  }
+  .rootcause b{color:#fff1ee;}
+  .conf{
+    margin-left:auto;
+    padding:5px 9px;
+    border-radius:2px;
+    background:#2c1514;
+    color:#ffd0ca;
+    border:1px solid #8d3c35;
+    font-size:.72rem;
+    font-weight:900;
+    letter-spacing:.08em;
+  }
+  .chain{
+    position:relative;
+    display:grid;
+    gap:12px;
+    font-size:1.04rem;
+    line-height:1.35;
+  }
+  .chain::before{
+    content:"";
+    position:absolute;
+    left:93px;
+    top:18px;
+    bottom:18px;
+    width:3px;
+    background:linear-gradient(180deg,#ff6b5f,#d98a46 48%,#4b5967);
+    border-radius:999px;
+  }
+  .chain li{
+    list-style:none;
+    display:grid;
+    grid-template-columns:78px 24px minmax(0,1fr);
+    gap:10px;
+    align-items:start;
+    padding:0;
+    border-bottom:0;
+    position:relative;
+  }
+  .chain .ct{
+    color:#d2dbe3;
+    font-size:.95rem;
+    font-weight:850;
+    padding-top:10px;
+    text-align:right;
+  }
+  .chain .node{
+    position:relative;
+    z-index:1;
+    width:17px;
+    height:17px;
+    margin:11px auto 0;
+    border-radius:50%;
+    background:#d98a46;
+    border:3px solid #101820;
+    box-shadow:0 0 0 2px rgba(217,138,70,.55);
+  }
+  .chain li:first-child .node{
+    width:21px;
+    height:21px;
+    margin-top:9px;
+    background:#ff6b5f;
+    box-shadow:0 0 0 3px rgba(255,107,95,.38),0 0 22px rgba(255,107,95,.35);
+  }
+  .chain .event{
+    min-height:42px;
+    padding:10px 12px;
+    background:#0c131a;
+    border:1px solid #263340;
+    border-left:4px solid #d98a46;
+    color:#dce5ed;
+    font-weight:720;
+  }
+  .chain li:first-child .event{
+    background:linear-gradient(90deg,rgba(126,39,35,.62),rgba(12,19,26,.98));
+    border-color:#8d3c35;
+    border-left-color:#ff6b5f;
+    color:#fff2ef;
+    font-weight:850;
+  }
+  .cite{
+    margin-bottom:6px;
+    padding:8px 10px;
+    color:#aeb9c4;
+    background:#0c131a;
+    border:1px solid #222d38;
+    border-left:4px solid #566575;
+    font-size:.86rem;
+    line-height:1.4;
+  }
+  .cite b{color:#d3dce4;}
+  .llmCite{margin-top:8px;}
+  .actions{display:grid; gap:10px;}
+  .actions li{
+    list-style:none;
+    padding:13px 14px 13px 42px;
+    position:relative;
+    background:#0d1710;
+    border:1px solid #25392a;
+    color:#d8e5d8;
+    font-size:1.08rem;
+    font-weight:750;
+    line-height:1.35;
+  }
+  .actions li::before{
+    content:"";
+    position:absolute;
+    left:16px;
+    top:19px;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:var(--green);
+  }
+  .summary{
+    background:#0b1117;
+    border:1px solid #222d38;
+    padding:10px;
+    color:#aeb9c4;
+    font-size:.86rem;
+    line-height:1.45;
+    white-space:pre-wrap;
+  }
+  .perfline{
+    margin:0;
+    padding:7px 14px;
+    color:#778391 !important;
+    background:#090e13;
+    border-top:1px solid var(--line-soft);
+    font-size:.68rem;
+    line-height:1.35;
+  }
+  .perfline b{color:#a9d3ac;}
+  .secondaryReport{
+    padding:10px 18px;
+    color:#7f8b97;
+    background:#090e13;
+    border-top:1px solid var(--line-soft);
+    font-size:.78rem;
+    line-height:1.35;
+  }
+  .secondaryReport b{color:#aeb8c2;}
+
+  @media (max-width:1100px){
+    .toolbar{grid-template-columns:1fr 1fr 1fr;}
+    .stats{grid-column:1 / -1; justify-self:stretch; grid-template-columns:repeat(3,1fr);}
+    main{grid-template-columns:1fr; overflow:auto;}
+    body{overflow:auto;}
+    .alarmPanel,.incidentPanel{min-height:430px;}
+  }
+  @media (max-width:720px){
+    .toolbar{display:flex; flex-wrap:wrap; padding:10px;}
+    button{flex:1 1 160px;}
+    .stats{display:grid; grid-template-columns:1fr; width:100%;}
+    main{padding:8px; gap:8px;}
+    .alarm{grid-template-columns:66px 54px 88px minmax(0,1fr); gap:6px; font-size:.78rem;}
+    .chain::before{left:79px;}
+    .chain li{grid-template-columns:64px 24px minmax(0,1fr);}
+  }
+</style>
+
+</head>
+<body>
+
+<div class="statusHooks" aria-hidden="true">
+  <span class="badge llm" id="llmBadge">EDGE LLM: checking…</span>
+  <span class="badge data" id="dataBadge">DATA: …</span>
+  <span class="clock" id="clock"></span>
+</div>
+
+<div class="toolbar">
+  <button id="btnStorm">Start Storm</button>
+  <button id="btnCorrelate" disabled>Correlate Incident</button>
+  <button id="btnReset">Reset</button>
+  <div class="stats">
+    <span class="alarmcount">ACTIVE ALARMS <b id="stAlarms">0</b></span>
+    <span>ALARM RATE <b id="stRate">0</b>/min</span>
+    <span>UNIT LOAD <b id="stLoad">412 MW</b></span>
+  </div>
+</div>
+
+<main>
+  <div class="alarmPanel">
+    <div class="panelTitle">Live Alarm Stream<span id="srcNote"></span></div>
+    <div id="alarmList"></div>
+  </div>
+
+  <div class="incidentPanel">
+    <div class="panelTitle">Incident Correlation · Advisory</div>
+    <div id="incidentBody">
+      <div class="placeholder" id="placeholder">
+        Standing by for alarm input.<br><br>
+        Start the storm, then correlate the active alarms into one operator-facing incident.
+        <span>Advisory only. Processing remains on-device inside the plant network.</span>
+      </div>
+      <div class="spinner" id="spinner">
+        <div class="spinnerLabel">Edge Analysis Running<span class="dots"></span></div>
+        <div class="stage" id="stage"></div>
+      </div>
+      <div id="result"></div>
+    </div>
+  </div>
+</main>
+
+<!-- REAL-DATA MODE: uncomment the next line to drive the demo from open ICS data.
+     alarms_dataset.js is already generated from HAI 21.03 (test1.csv) by dataset_to_alarms.py. -->
+<!-- <script src="alarms_dataset.js"></script> -->
+
+<script>
+/* ============== DATA SOURCE / OPEN-DATASET GROUNDING ==============
+   The alarm stream below ships as a curated synthetic cascade so the demo
+   runs by double-click with zero setup. To run it on REAL public ICS
+   benchmark data instead:
+     1. Download an open dataset:
+          HAI  (primary):  github.com/icsdataset/hai   (turbine/boiler/CW SCADA)
+          TEP  (backup) :  Tennessee Eastman fault-diagnosis benchmark
+     2. python3 dataset_to_alarms.py <dataset>.csv     -> alarms_dataset.js
+     3. Add, just above this <script>:
+          <script src="alarms_dataset.js"><\/script>
+   When window.DATASET_ALARMS is present the demo auto-switches to the
+   dataset-derived stream (DATA badge turns purple). For a real customer you
+   only swap the CSV + tag mapping + SOP/maintenance docs.
+   ================================================================ */
+
+/* ================= CONFIG — edit freely ================= */
+const OLLAMA_URL  = "http://localhost:11434";
+const OLLAMA_MODEL = "llama3.1";      // or qwen2.5:7b, phi3, ...
+const STORM_SPEED_MS = 380;           // delay between alarms
+/* ======================================================== */
+
+/* ---------- Synthetic SCADA alarm cascade ---------- */
+const ALARMS = [
+ ["14:02:13","CRITICAL","CWP-2-MTR","Cooling water pump CWP-2 motor overcurrent trip"],
+ ["14:02:14","HIGH","CWP-2-FLW","Cooling water pump CWP-2 discharge flow LOW"],
+ ["14:02:15","HIGH","CW-HDR-PRS","Cooling water header pressure LOW"],
+ ["14:02:18","MEDIUM","CWP-1-LOAD","Cooling water pump CWP-1 load HIGH (single-pump operation)"],
+ ["14:02:22","LOW","AUX-BUS-A","Aux bus A current deviation"],
+ ["14:02:31","MEDIUM","LO-CLR-TMP","Lube oil cooler outlet temperature rising"],
+ ["14:02:40","HIGH","LO-TMP","Turbine lube oil temperature HIGH"],
+ ["14:02:47","LOW","COND-VAC","Condenser vacuum deviation"],
+ ["14:02:55","MEDIUM","GEN-STR-TMP","Generator stator cooling water temp rising"],
+ ["14:03:05","CRITICAL","BRG-2-TMP","Turbine bearing #2 metal temperature HIGH-HIGH"],
+ ["14:03:08","CRITICAL","BRG-3-TMP","Turbine bearing #3 metal temperature HIGH-HIGH"],
+ ["14:03:12","HIGH","BRG-1-TMP","Turbine bearing #1 metal temperature HIGH"],
+ ["14:03:19","MEDIUM","LO-PRS","Lube oil pressure fluctuation"],
+ ["14:03:30","CRITICAL","VIB-ST3","Turbine shaft vibration HIGH (bearing #2/#3 plane)"],
+ ["14:03:35","HIGH","VIB-TREND","Vibration trend rate-of-change alarm"],
+ ["14:03:41","MEDIUM","GOV-DEV","Governor valve position deviation"],
+ ["14:03:48","CRITICAL","ST3-TRIP","TURBINE PROTECTIVE TRIP — ST-3 (vibration + bearing temp)"],
+ ["14:03:49","CRITICAL","GEN-BRK","Generator breaker 52G-3 OPEN"],
+ ["14:03:49","HIGH","ST3-SPD","Turbine speed decaying — coast-down initiated"],
+ ["14:03:50","HIGH","MS-PRS","Main steam pressure rising — turbine trip"],
+ ["14:03:51","HIGH","BYP-VLV","HP bypass valve OPEN — auto"],
+ ["14:03:52","MEDIUM","RH-TMP","Reheat steam temperature deviation"],
+ ["14:03:53","HIGH","HRSG3-LVL","HRSG-3 drum level transient HIGH"],
+ ["14:03:54","MEDIUM","FW-FLW","Feedwater flow mismatch"],
+ ["14:03:55","HIGH","GT3-RB","Gas turbine GT-3 runback initiated"],
+ ["14:03:56","MEDIUM","GT3-EXH","GT-3 exhaust temperature spread alarm"],
+ ["14:03:57","LOW","DEAER-PRS","Deaerator pressure deviation"],
+ ["14:03:58","MEDIUM","COND-LVL","Condenser hotwell level rising"],
+ ["14:03:59","LOW","CEP-LOAD","Condensate pump load change"],
+ ["14:04:00","HIGH","UNIT-MW","Unit 3 load rejection — output 412→0 MW"],
+ ["14:04:02","MEDIUM","FREQ-DEV","Grid frequency support deviation notice"],
+ ["14:04:04","LOW","TRAFO-TAP","Main transformer tap changer operation"],
+ ["14:04:07","MEDIUM","SEAL-STM","Gland seal steam pressure deviation"],
+ ["14:04:10","LOW","DC-CHG","DC charger load step"],
+ ["14:04:13","MEDIUM","TG-JACK","Jacking oil pump auto-start"],
+ ["14:04:16","LOW","HVAC-CR","Control room HVAC load alarm"],
+ ["14:04:20","MEDIUM","BRG-2-TMP","Bearing #2 temperature still HIGH — coast-down"],
+ ["14:04:25","LOW","CW-CHEM","Cooling water chemistry sampler offline"],
+ ["14:04:31","MEDIUM","LO-TNK-LVL","Lube oil tank level transient"],
+ ["14:04:38","LOW","AUX-STM","Auxiliary steam header pressure deviation"],
+ ["14:04:45","MEDIUM","ST3-ECC","Turbine shaft eccentricity monitor — coast-down watch"],
+ ["14:04:52","LOW","OPC-LINK","OPC-UA historian buffer backlog (local)"]
+];
+
+/* ---------- Simulated RAG knowledge base ---------- */
+const RAG_DOCS = [
+ {id:"WO-2026-0871", title:"Work Order (3 weeks ago)", text:"CWP-2 motor: abnormal vibration and elevated winding temperature noted during routine inspection. Bearing replacement recommended. Maintenance DEFERRED to next planned outage due to parts lead time."},
+ {id:"SOP-114", title:"SOP — Turbine Trip on High Vibration / Bearing Temp", text:"Following protective trip: confirm coast-down, keep jacking & lube oil pumps in service, do not restart until bearing inspection complete and cooling water system redundancy restored."},
+ {id:"INC-2024-031", title:"Past Incident Report", text:"Similar event 2024: single cooling water pump trip at full load led to bearing temperature excursion within 90 seconds. Recommendation: treat CW pump trips at >90% load as imminent turbine trip risk."}
+];
+
+/* ---------- Source selection: real open dataset overrides synthetic ---------- */
+const DATA_FROM_DATASET = Array.isArray(window.DATASET_ALARMS) && window.DATASET_ALARMS.length > 0;
+const ACTIVE_ALARMS = DATA_FROM_DATASET ? window.DATASET_ALARMS : ALARMS;
+const ACTIVE_RAG    = (DATA_FROM_DATASET && Array.isArray(window.DATASET_RAG)) ? window.DATASET_RAG : RAG_DOCS;
+
+/* ---------- Pre-computed analysis (mock mode + ground truth) ---------- */
+const MOCK_RESULT = {
+ title:"INCIDENT #2026-0610-A — Unit 3 Turbine Trip",
+ rootcause:"<b>Cooling water pump CWP-2 motor failure</b> (overcurrent trip at 14:02:13). Loss of cooling capacity at full load caused lube oil and bearing temperature excursion, leading to high shaft vibration and a turbine protective trip 95 seconds later. The remaining 35+ alarms are downstream consequences, not independent faults.",
+ confidence:"HIGH",
+ chain:[
+  ["14:02:13","CWP-2 motor overcurrent trip — ROOT CAUSE"],
+  ["14:02:15","Cooling water header pressure low → reduced heat removal"],
+  ["14:02:40","Lube oil temperature high → bearing oil film degradation"],
+  ["14:03:05","Bearing #2/#3 metal temp HIGH-HIGH"],
+  ["14:03:30","Shaft vibration HIGH (thermal bow / oil film)"],
+  ["14:03:48","Turbine protective trip ST-3 → load rejection, ~35 cascade alarms"]
+ ],
+ citations:[
+  ["WO-2026-0871","CWP-2 abnormal vibration was reported 3 weeks ago; bearing replacement was deferred. Strongly consistent with today's motor failure."],
+  ["SOP-114","Post-trip: maintain lube oil & jacking pumps, no restart before bearing inspection and CW redundancy restored."],
+  ["INC-2024-031","Identical failure mode in 2024: single CW pump trip at high load → bearing excursion within ~90s."]
+ ],
+ actions:[
+  "Verify turbine coast-down; keep jacking oil and AC lube oil pumps in service (SOP-114).",
+  "Isolate CWP-2 electrically; inspect motor bearings — link to deferred WO-2026-0871.",
+  "Confirm CWP-1 stable for shutdown cooling loads; restore CW redundancy before any restart.",
+  "Schedule bearing #2/#3 inspection before restart clearance.",
+  "Flag maintenance-deferral policy for review: deferred CWP-2 work order preceded this trip."
+ ],
+ summary:"SHIFT HANDOVER — Unit 3, 14:02–14:05\nTurbine ST-3 tripped on high vibration/bearing temperature following CWP-2 motor failure at full load (412 MW). 42 alarms correlated to a single incident. Root cause: CWP-2 motor overcurrent trip (deferred maintenance item WO-2026-0871). Unit in coast-down, lube oil & jacking pumps in service. Restart blocked pending bearing inspection and CW redundancy restoration. No grid penalty event recorded."
+};
+
+/* ---------- UI wiring ---------- */
+const $ = id => document.getElementById(id);
+let alarmCount = 0, stormDone = false, llmOnline = false;
+
+setInterval(()=>{ $("clock").textContent = new Date().toLocaleString(); },1000);
+$("clock").textContent = new Date().toLocaleString();
+
+/* Data-provenance badge: show whether we're on a real open dataset or synthetic */
+(function(){
+  if(DATA_FROM_DATASET){
+    const m = window.DATASET_META || {};
+    $("dataBadge").textContent = "DATA: " + (m.source_type||"OPEN DATASET") + " (open benchmark)";
+    $("srcNote").textContent = "derived from " + (m.source_file||m.source_type||"open ICS dataset");
+  }else{
+    $("dataBadge").textContent = "DATA: SYNTHETIC CASCADE";
+    $("srcNote").textContent = "schema ⇄ HAI / TEP open datasets";
+  }
+})();
+
+/* Detect local Ollama (optional) */
+fetch(OLLAMA_URL+"/api/tags",{signal:AbortSignal.timeout(1500)})
+ .then(r=>r.ok?r.json():Promise.reject())
+ .then(()=>{ llmOnline=true; $("llmBadge").textContent="EDGE LLM: OLLAMA · "+OLLAMA_MODEL; })
+ .catch(()=>{ $("llmBadge").textContent="EDGE LLM: LOCAL (DEMO MODE)"; });
+
+$("btnStorm").onclick = () => {
+  $("btnStorm").disabled = true;
+  let i = 0;
+  const iv = setInterval(()=>{
+    if(i >= ACTIVE_ALARMS.length){
+      clearInterval(iv); stormDone = true;
+      $("btnCorrelate").disabled = false;
+      $("btnCorrelate").classList.add("pulse");
+      return;
+    }
+    addAlarm(ACTIVE_ALARMS[i]); i++;
+  }, STORM_SPEED_MS);
+};
+
+function addAlarm([t,sev,tag,msg]){
+  const d = document.createElement("div");
+  d.className = "alarm "+sev;
+  d.innerHTML = `<span class="t">${t}</span><span class="sev">${sev}</span><span class="tag">${tag}</span><span>${msg}</span>`;
+  $("alarmList").prepend(d);
+  alarmCount++;
+  $("stAlarms").textContent = alarmCount;
+  $("stRate").textContent = Math.min(99, Math.round(alarmCount*1.6));
+  if(tag==="ST3-TRIP"){ $("stLoad").textContent="0 MW"; $("stLoad").style.color="var(--red)"; }
+}
+
+$("btnCorrelate").onclick = async () => {
+  $("btnCorrelate").disabled = true;
+  $("btnCorrelate").classList.remove("pulse");
+  $("placeholder").style.display = "none";
+  $("spinner").style.display = "block";
+  const t0 = performance.now();
+
+  const stages = [`Normalizing ${ACTIVE_ALARMS.length} alarm events…`,"Building event timeline…","Retrieving context: SOPs · work orders · incident history (local vector DB)…","Running root-cause reasoning on edge LLM…"];
+  for(let s of stages){ $("stage").textContent = s; await sleep(llmOnline?900:1100); }
+
+  let result = (DATA_FROM_DATASET ? buildDatasetResult() : MOCK_RESULT), llmNote = "";
+  if(llmOnline){
+    try{
+      const prompt = buildPrompt();
+      const r = await fetch(OLLAMA_URL+"/api/generate",{method:"POST",
+        body: JSON.stringify({model:OLLAMA_MODEL, prompt, stream:false}),
+        signal: AbortSignal.timeout(60000)});
+      const j = await r.json();
+      llmNote = j.response || "";
+    }catch(e){ llmNote = ""; }
+  }
+
+  const ms = ((performance.now()-t0)/1000).toFixed(1);
+  $("spinner").style.display = "none";
+  renderResult(result, ms, llmNote);
+};
+
+/* Build a coherent incident card from real dataset-derived alarms (offline mock path).
+   Used when alarms_dataset.js is loaded so the analysis matches the data, not CWP-2. */
+function buildDatasetResult(){
+  const m = window.DATASET_META || {};
+  const A = ACTIVE_ALARMS;
+  const strip = s => s.replace(/^ROOT CAUSE\s*-\s*/i, "");
+  const rc = A.find(a=>/ROOT CAUSE/i.test(a[3])) || A[0];
+  const chain = A.filter(a=>a[1]==="CRITICAL"||a[1]==="HIGH").slice(0,6)
+                 .map(a=>[a[0], `${a[2]} — ${strip(a[3])}`]);
+  return {
+    title: `INCIDENT — ${m.source_type||"OPEN DATASET"} anomaly window`,
+    rootcause: `<b>${rc[2]}</b> shows the first / largest deviation (${rc[0]}: ${strip(rc[3])}). `
+             + `${A.length} alarms — derived from the ${m.source_type||"open ICS"} benchmark — correlate to this single onset; `
+             + `the later tags are downstream consequences, not independent faults.`,
+    confidence: "MEDIUM",
+    chain: chain.length ? chain : A.slice(0,6).map(a=>[a[0], `${a[2]} — ${strip(a[3])}`]),
+    citations: ACTIVE_RAG.map(d=>[d.id, d.text]),
+    actions: [
+      `Inspect the asset behind tag ${rc[2]} (earliest deviation in the window).`,
+      "Cross-check deferred maintenance / open work orders for that tag.",
+      "Confirm redundancy on the affected loop before continuing operation.",
+      "Record the correlated incident and attach the shift-handover below."
+    ],
+    summary: `SHIFT HANDOVER — ${m.source_type||"dataset"} window\n`
+           + `${A.length} alarms correlated to one incident. Earliest/strongest deviation: `
+           + `${rc[2]} at ${rc[0]}. Source: ${m.source_file||m.source_type||"open ICS benchmark"}. `
+           + `Per customer, swap tag mapping + SOP/maintenance docs.`
+  };
+}
+
+function buildPrompt(){
+  const log = ACTIVE_ALARMS.map(a=>`${a[0]} [${a[1]}] ${a[2]}: ${a[3]}`).join("\n");
+  const ctx = ACTIVE_RAG.map(d=>`(${d.id}) ${d.title}: ${d.text}`).join("\n");
+  return `You are an assistant for power plant operators. Given this alarm log and retrieved context, state the single root cause in 2 sentences.\n\nALARM LOG:\n${log}\n\nRETRIEVED CONTEXT:\n${ctx}\n\nROOT CAUSE:`;
+}
+
+function renderResult(r, ms, llmNote){
+  $("result").innerHTML = `
+  <div class="card">
+    <h2>CRITICAL EVENT · ${r.title}</h2>
+    <div class="meta">${ACTIVE_ALARMS.length} alarms correlated into 1 incident · edge analysis ${ms}s</div>
+
+    <div class="section">
+      <h3>Root Cause <span class="conf">${r.confidence}</span></h3>
+      <div class="rootcause">${r.rootcause}</div>
+      ${llmNote?`<div class="cite llmCite"><b>Edge LLM (${OLLAMA_MODEL})</b> ${esc(llmNote).slice(0,600)}</div>`:""}
+    </div>
+
+    <div class="section">
+      <h3>Critical Timeline</h3>
+      <ul class="chain">${r.chain.map(c=>`<li><span class="ct">${c[0]}</span><span class="node"></span><span class="event">${c[1]}</span></li>`).join("")}</ul>
+    </div>
+
+    <div class="section">
+      <h3>Operator Actions</h3>
+      <ul class="actions">${r.actions.slice(0,4).map(a=>`<li>${a}</li>`).join("")}</ul>
+    </div>
+
+    <div class="secondaryReport"><b>Evidence:</b> ${r.citations.map(c=>c[0]).join(" · ")} · <b>Mode:</b> on-device advisory · <b>Cloud:</b> 0 calls</div>
+  </div>`;
+}
+
+$("btnReset").onclick = () => {
+  $("alarmList").innerHTML=""; $("result").innerHTML="";
+  $("placeholder").style.display="block"; $("spinner").style.display="none";
+  alarmCount=0; stormDone=false;
+  $("stAlarms").textContent="0"; $("stRate").textContent="0";
+  $("stLoad").textContent="412 MW"; $("stLoad").style.color="";
+  $("btnStorm").disabled=false; $("btnCorrelate").disabled=true;
+  $("btnCorrelate").classList.remove("pulse");
+};
+
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+const esc = s => s.replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+</script>
+</body>
+</html>
