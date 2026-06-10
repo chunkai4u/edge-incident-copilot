@@ -26,6 +26,15 @@ flowchart LR
     C --> E[Critical Timeline]
     C --> F[Operator Actions]
     C --> G[Evidence References]
+
+    classDef alarm fill:#7f1d1d,stroke:#ef4444,color:#ffffff,stroke-width:2px;
+    classDef copilot fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px;
+    classDef card fill:#1e293b,stroke:#94a3b8,color:#f8fafc,stroke-width:2px;
+    classDef output fill:#14532d,stroke:#22c55e,color:#dcfce7,stroke-width:1.5px;
+    class A alarm;
+    class B copilot;
+    class C card;
+    class D,E,F,G output;
 ```
 
 ## Who
@@ -61,13 +70,22 @@ flowchart TD
     B --> E[SOP Binder]
     B --> F[Maintenance Work Orders]
     B --> G[Senior Operator Memory]
-    C --> H[Manual Correlation Under Pressure]
+    C --> H[Manual Correlation<br/>Under Pressure]
     D --> H
     E --> H
     F --> H
     G --> H
-    H --> I[Slow Root-Cause Understanding]
-    H --> J[Weak Shift Handover]
+    H --> I[Slow Root-Cause<br/>Understanding]
+    H --> J[Weak Shift<br/>Handover]
+
+    classDef incident fill:#7f1d1d,stroke:#ef4444,color:#ffffff,stroke-width:2px;
+    classDef source fill:#1e293b,stroke:#64748b,color:#f8fafc;
+    classDef burden fill:#78350f,stroke:#f59e0b,color:#fff7ed,stroke-width:2px;
+    classDef cost fill:#3f1d1d,stroke:#f87171,color:#fee2e2;
+    class A,B incident;
+    class C,D,E,F,G source;
+    class H burden;
+    class I,J cost;
 ```
 
 ## Why Now
@@ -93,6 +111,17 @@ flowchart LR
     G --> H
     H --> I[Human Operator Decision]
     D -. no cloud transfer .-> J[(Plant Data Stays Local)]
+
+    classDef input fill:#172554,stroke:#60a5fa,color:#eff6ff;
+    classDef edge fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:3px;
+    classDef process fill:#312e81,stroke:#818cf8,color:#eef2ff;
+    classDef result fill:#14532d,stroke:#22c55e,color:#dcfce7,stroke-width:2px;
+    classDef local fill:#1f2937,stroke:#94a3b8,color:#f8fafc,stroke-dasharray: 5 5;
+    class A,B,C input;
+    class D edge;
+    class E,F,G process;
+    class H,I result;
+    class J local;
 ```
 
 ## Proof
@@ -108,6 +137,7 @@ This repository contains a working offline demo.
 The HAI dataset mode shows that the pipeline can convert real industrial time-series benchmark data into SCADA-style alarms. The SOP and work-order evidence in this repository is synthetic demo context, not customer documentation.
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#0f172a", "primaryTextColor": "#e0f2fe", "primaryBorderColor": "#38bdf8", "actorBkg": "#1e293b", "actorBorder": "#94a3b8", "actorTextColor": "#f8fafc", "signalColor": "#38bdf8", "signalTextColor": "#e2e8f0", "noteBkgColor": "#14532d", "noteTextColor": "#dcfce7"}}}%%
 sequenceDiagram
     participant Operator
     participant Demo as Edge Incident Copilot
