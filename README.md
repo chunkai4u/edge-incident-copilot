@@ -1,3 +1,11 @@
+<p align="center">
+  <img src="images/banner.svg" alt="Edge Incident Copilot" width="100%">
+</p>
+
+<p align="center">
+  <a href="https://chunkai4u.github.io/edge-incident-copilot/"><b>▶ Try the live demo</b></a>
+</p>
+
 # Edge Incident Copilot
 
 **Turn industrial alarm floods into one clear incident card, locally, in seconds.**
