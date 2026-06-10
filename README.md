@@ -160,6 +160,10 @@ sequenceDiagram
 
 ## Demo Scenario
 
+<p align="center">
+  <img src="images/demo-scenario.png" alt="Cooling water pump failure leading to turbine trip" width="100%">
+</p>
+
 The default demo shows a realistic combined-cycle power plant incident: **cooling water pump failure leading to turbine trip**.
 
 1. Cooling water pump `CWP-2` trips on motor overcurrent.
