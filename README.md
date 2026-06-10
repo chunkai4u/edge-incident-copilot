@@ -137,7 +137,7 @@ This repository contains a working offline demo.
 The HAI dataset mode shows that the pipeline can convert real industrial time-series benchmark data into SCADA-style alarms. The SOP and work-order evidence in this repository is synthetic demo context, not customer documentation.
 
 ```mermaid
-%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#0f172a", "primaryTextColor": "#e0f2fe", "primaryBorderColor": "#38bdf8", "actorBkg": "#1e293b", "actorBorder": "#94a3b8", "actorTextColor": "#f8fafc", "signalColor": "#38bdf8", "signalTextColor": "#e2e8f0", "noteBkgColor": "#14532d", "noteTextColor": "#dcfce7"}}}%%
+%%{init: {"theme": "base"}}%%
 sequenceDiagram
     participant Operator
     participant Demo as Edge Incident Copilot
