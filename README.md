@@ -1,95 +1,136 @@
 # Edge Incident Copilot
 
-**Offline incident copilot for energy and water control rooms.**
+**Turn industrial alarm floods into one clear incident card, locally, in seconds.**
 
-> **YC-style positioning:** We turn SCADA alarm floods into one operator-ready incident card, locally, in seconds, without sending plant data to the cloud.
+Edge Incident Copilot is an offline demo for control rooms in energy, water, and other critical infrastructure facilities. When a plant upset creates dozens of alarms at once, the copilot helps operators understand what likely happened, what matters first, and what actions should be considered next, without sending plant data to the cloud.
 
-This is a pitch demo for critical-infrastructure operators: power plants, water utilities, industrial sites, and other facilities where downtime, safety, and data isolation matter.
+## What
 
-## The Problem
+Industrial operators already have SCADA and DCS systems that show alarms. The problem is that these systems usually show the flood, not the story.
 
-When something goes wrong in a plant, the control room can receive dozens of alarms in seconds.
+Edge Incident Copilot sits on top of existing control-room systems and turns raw alarm streams into one operator-ready incident card:
 
-Operators often have to jump between:
+1. One likely root-cause hypothesis.
+2. One critical timeline of what happened.
+3. Recommended operator actions.
+4. Evidence references from SOPs, work orders, or past incidents.
+5. A simple summary that can be used for shift handover or incident review.
 
-- SCADA alarm lists
-- historian screens
-- SOP binders
-- maintenance work orders
-- senior-operator memory
+It is not an autonomous controller. It is an advisory layer. The human operator stays in control.
 
-That creates three painful problems:
+```mermaid
+flowchart LR
+    A[Alarm Storm<br/>Dozens of SCADA alarms] --> B[Edge Incident Copilot<br/>Local analysis]
+    B --> C[One Incident Card]
+    C --> D[Root Cause]
+    C --> E[Critical Timeline]
+    C --> F[Operator Actions]
+    C --> G[Evidence References]
+```
 
-- **Alarm flood:** too many alarms, not enough signal.
-- **Slow root-cause discovery:** the first alarm is not always the real problem.
-- **Weak handover:** the next shift may not get a clear, evidence-backed summary.
+## Who
 
-## What This Demo Shows
+This project is built for facilities where downtime, safety, and data isolation matter.
 
-During an alarm storm, the operator clicks once.
+1. Power plant control rooms.
+2. Water and wastewater utilities.
+3. Industrial sites with strict cybersecurity and data-sovereignty rules.
+4. Operators who already use SCADA, DCS, historians, SOPs, and maintenance systems, but still need faster incident understanding during stressful plant upsets.
 
-The demo compresses many raw alarms into one incident card:
+The product is designed as a last-mile cognition layer. It does not replace Honeywell, Emerson, ABB, Yokogawa, or other industrial control systems. It reads from them, connects the dots, and presents a clearer incident view for the operator.
 
-- likely root cause
-- critical event timeline
-- recommended operator actions
-- cited SOP / work-order evidence
-- concise handover summary
+## Pain
 
-Everything runs locally. No cloud connection is required.
+During a real plant upset, the first problem is not always the loudest alarm. A single physical failure can trigger many downstream alarms within seconds.
 
-## Demo Scenario
+Today, operators often have to mentally connect several separate sources at once:
 
-### Stage Demo: Cooling Water Pump Failure -> Turbine Trip
+1. SCADA alarm lists show what is ringing now.
+2. Historian screens show how values changed over time.
+3. SOP documents explain what should be done.
+4. Work orders show known maintenance risk.
+5. Senior operators provide context from experience.
 
-The default story is a realistic combined-cycle power plant upset:
+That creates delay and uncertainty at exactly the moment when clarity matters most.
 
-1. Cooling water pump `CWP-2` trips on motor overcurrent.
-2. Cooling water flow and pressure drop.
-3. Lube oil and bearing temperatures rise.
-4. Shaft vibration becomes critical.
-5. The turbine trips and creates a cascade of downstream alarms.
-
-The important demo moment: a deferred maintenance work order had already flagged `CWP-2` as risky. The copilot surfaces that evidence immediately.
-
-### Dataset Mode: Public ICS Benchmark Data
-
-The project also includes a real-data mode generated from the public **HAI industrial control systems benchmark**.
-
-In the shipped dataset run, the converter finds an early pressure-transmitter anomaly around `P1_PIT01` and turns the benchmark time-series data into 42 SCADA-style alarms.
-
-Important: the HAI data is real benchmark sensor data. The SOP / work-order documents used for the demo are synthetic placeholders so the product flow can be shown without customer documents.
-
-## Who It Is For
-
-- Power plant control rooms
-- Water and wastewater facilities
-- Industrial sites with strict data-sovereignty rules
-- Operators who already use SCADA/DCS systems but still need faster incident understanding
-
-## What It Is Not
-
-This is not trying to replace Honeywell, Emerson, ABB, Yokogawa, or existing SCADA/DCS systems.
-
-It is a **last-mile cognition layer** on top of them:
-
-- reads alarms
-- reads historian tags
-- retrieves SOPs and work orders
-- summarizes the situation
-- keeps the human operator in control
-
-The copilot is advisory. The operator makes the final decision.
+```mermaid
+flowchart TD
+    A[Plant Upset] --> B[Alarm Flood]
+    B --> C[SCADA Alarm List]
+    B --> D[Historian Trends]
+    B --> E[SOP Binder]
+    B --> F[Maintenance Work Orders]
+    B --> G[Senior Operator Memory]
+    C --> H[Manual Correlation Under Pressure]
+    D --> H
+    E --> H
+    F --> H
+    G --> H
+    H --> I[Slow Root-Cause Understanding]
+    H --> J[Weak Shift Handover]
+```
 
 ## Why Now
 
-Three changes make this possible now:
+This product direction is becoming practical now because three changes are happening at the same time.
 
-- Small local LLMs can run at the edge.
-- Retrieval can connect alarms to plant documents.
-- OT environments increasingly need data isolation because of regulation and cybersecurity risk.
+1. Small local LLMs can run close to the plant network instead of relying on cloud inference.
+2. Retrieval systems can connect live alarms to SOPs, work orders, and past incidents.
+3. Critical infrastructure operators face stronger expectations around data isolation, cybersecurity, and operational resilience.
 
-This aligns with the direction of NIS2, EU AI Act expectations, and industrial data-sovereignty requirements.
+The result is a new opportunity: help operators make sense of plant incidents faster while keeping sensitive operational data inside the facility.
+
+```mermaid
+flowchart LR
+    A[Existing SCADA / DCS] --> D[Local Edge Box]
+    B[Historian Tags] --> D
+    C[SOPs + Work Orders] --> D
+    D --> E[Alarm Correlation]
+    D --> F[Document Retrieval]
+    D --> G[Local LLM Reasoning]
+    E --> H[Incident Card]
+    F --> H
+    G --> H
+    H --> I[Human Operator Decision]
+    D -. no cloud transfer .-> J[(Plant Data Stays Local)]
+```
+
+## Proof
+
+This repository contains a working offline demo.
+
+1. The main demo is a single self-contained HTML file.
+2. The default stage scenario runs without installation or internet access.
+3. If Ollama is available locally, the demo can call a local LLM.
+4. If no local LLM is available, the demo still works using a deterministic built-in result.
+5. A dataset mode is included using public industrial control systems benchmark data from HAI 21.03.
+
+The HAI dataset mode shows that the pipeline can convert real industrial time-series benchmark data into SCADA-style alarms. The SOP and work-order evidence in this repository is synthetic demo context, not customer documentation.
+
+```mermaid
+sequenceDiagram
+    participant Operator
+    participant Demo as Edge Incident Copilot
+    participant Alarms as Alarm Stream
+    participant Docs as SOP / Work Orders
+    Operator->>Demo: Start storm
+    Demo->>Alarms: Stream alarm events
+    Operator->>Demo: Correlate incident
+    Demo->>Docs: Retrieve relevant evidence
+    Demo-->>Operator: Root cause + timeline + actions
+```
+
+## Demo Scenario
+
+The default demo shows a realistic combined-cycle power plant incident: **cooling water pump failure leading to turbine trip**.
+
+1. Cooling water pump `CWP-2` trips on motor overcurrent.
+2. Cooling water pressure drops.
+3. Lube oil and bearing temperatures rise.
+4. Shaft vibration becomes critical.
+5. The turbine trips and a cascade of downstream alarms follows.
+
+The key moment is that a deferred maintenance work order had already flagged `CWP-2` as risky. The copilot surfaces that evidence inside the incident card instead of leaving it buried in maintenance history.
 
 ## How To Run
 
@@ -99,18 +140,16 @@ Open the demo directly:
 open alarm_storm_demo.html
 ```
 
-Or double-click `alarm_storm_demo.html`.
-
-Then:
+Then run the demo flow:
 
 1. Click **Start Storm**.
 2. Wait for the alarm flood to stream in.
 3. Click **Correlate Incident**.
 4. Review the incident card.
 
-No install is required for demo mode.
+No install is required for the default demo.
 
-## Optional: Use A Local LLM
+## Optional Local LLM
 
 If Ollama is running locally, the demo can call it:
 
@@ -119,35 +158,31 @@ ollama serve
 ollama pull llama3.1
 ```
 
-The UI still works without Ollama. If no local model is available, it uses the built-in deterministic demo result.
+The demo is still usable without Ollama.
 
-## Optional: Run Dataset Mode
+## Optional Dataset Mode
 
 `alarms_dataset.js` is already generated from HAI 21.03 data.
 
-To enable it, open `alarm_storm_demo.html` and uncomment this line near the bottom:
+To enable dataset mode, open `alarm_storm_demo.html` and uncomment this line near the bottom:
 
 ```html
 <!-- <script src="alarms_dataset.js"></script> -->
 ```
 
-Then reload the page.
+Then reload the page. For more detail, see [`README_DATASET.md`](README_DATASET.md).
 
-For details, see [`README_DATASET.md`](README_DATASET.md).
+## Repository Contents
 
-## Files
-
-| File | Purpose |
-|---|---|
-| `alarm_storm_demo.html` | Single-file offline demo UI |
-| `dataset_to_alarms.py` | Converts public ICS CSV data into SCADA-style alarms |
-| `alarms_dataset.js` | Generated HAI dataset alarm stream |
-| `alarms_dataset.json` | JSON version of the generated alarm stream |
-| `README_DATASET.md` | Dataset-mode details and limitations |
-| `DEMO_IDEA.md` | Longer pitch notes and positioning |
+1. `alarm_storm_demo.html` is the single-file offline demo UI.
+2. `dataset_to_alarms.py` converts public ICS CSV data into SCADA-style alarms.
+3. `alarms_dataset.js` is the generated HAI dataset alarm stream.
+4. `alarms_dataset.json` is the JSON version of the generated alarm stream.
+5. `README_DATASET.md` explains dataset mode and limitations.
+6. `DEMO_IDEA.md` contains supporting product and demo notes.
 
 ## Current Status
 
-This is a pre-pilot demo, built to show the workflow and value proposition.
+This is a pre-pilot demo. It proves the workflow, the operator experience, and the offline architecture.
 
-The right next step is a controlled pilot with a real facility using their alarm export, historian tags, SOPs, and maintenance records.
+The next step is a controlled pilot with a real facility using its own alarm exports, historian tags, SOPs, and maintenance records.
