@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="images/banner.svg" alt="Edge Incident Copilot" width="100%">
+  <img src="images/edge-incident-copilot_banner.png" alt="Edge Incident Copilot" width="100%">
 </p>
 
 <p align="center">
