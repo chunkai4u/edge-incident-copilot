@@ -16,83 +16,105 @@
     </div>
   </nav>
 
-  <main class="demoShell">
-    <section class="demoHero">
+  <main class="consoleShell">
+    <section class="consoleHeader">
       <div>
-        <div class="heroKicker">Site Context</div>
-        <h1>Configure the Local Operating Context</h1>
-        <p>Read-only alarms, historian tags, SOPs, and work orders. No cloud transfer. No control write-back.</p>
+        <div class="heroKicker">Deployment Setup</div>
+        <h1>Site Configuration</h1>
+        <p>Define the local context the copilot may read.</p>
       </div>
+      <aside class="consoleStatus">
+        <strong>DEPLOYMENT PROFILE READY</strong>
+        <span>Read-only · Local edge · No write-back</span>
+      </aside>
     </section>
 
-    <section class="cardGrid" aria-label="Site configuration">
-      <article class="bigCard">
-        <h2>Facility Profile</h2>
-        <ul>
-          <li>Facility: Combined-Cycle Power Plant</li>
-          <li>Unit: Unit 3 / ST-3 Turbine Train</li>
-          <li>Operating mode: Full load, 412 MW</li>
-          <li>Critical asset: Cooling Water Pump CWP-2</li>
-        </ul>
-      </article>
-      <article class="bigCard">
-        <h2>Read-only OT Sources</h2>
-        <ul>
-          <li>SCADA alarm/event export</li>
-          <li>Historian tag snapshot</li>
-          <li>OPC-UA / CSV adapter</li>
-          <li>Write-back: DISABLED</li>
-        </ul>
-      </article>
-      <article class="bigCard">
-        <h2>Historian Tag Pack</h2>
-        <ul>
-          <li>CWP-2-MTR</li>
-          <li>CWP-2-FLW</li>
-          <li>CW-HDR-PRS</li>
-          <li>LO-TMP</li>
-          <li>BRG-2-TMP</li>
-          <li>VIB-ST3</li>
-          <li>ST3-TRIP</li>
-        </ul>
-      </article>
-      <article class="bigCard">
-        <h2>Approved Evidence Library</h2>
-        <ul>
-          <li>WO-2026-0871 CWP-2 deferred maintenance</li>
-          <li>SOP-114 Turbine trip recovery</li>
-          <li>INC-2024-031 Similar past incident</li>
-        </ul>
-      </article>
-      <article class="bigCard">
-        <h2>Edge AI Runtime</h2>
-        <ul>
-          <li>Local incident model</li>
-          <li>Ollama if available</li>
-          <li>Deterministic fallback mode</li>
-          <li>Plant-local inference</li>
-          <li>Cloud calls: 0</li>
-        </ul>
-      </article>
-      <article class="bigCard">
-        <h2>Retention &amp; Audit</h2>
-        <ul>
-          <li>Local incident logs: 30 days</li>
-          <li>Operator decisions recorded</li>
-          <li>Model/runtime mode logged</li>
-          <li>Evidence citations preserved</li>
-        </ul>
-      </article>
+    <section class="panelLayout configLayout" aria-label="Site configuration panel">
+      <aside class="sideMenu" aria-label="Configuration sections">
+        <h2>Configuration Sections</h2>
+        <button class="sideMenuItem active" type="button" data-target="siteProfile"><span>Site Profile</span><b>Configured</b></button>
+        <button class="sideMenuItem" type="button" data-target="otInputs"><span>OT Sources</span><b>Read-only</b></button>
+        <button class="sideMenuItem" type="button" data-target="approvedContext"><span>Tag Pack</span><b>Loaded</b></button>
+        <button class="sideMenuItem" type="button" data-target="approvedContext"><span>Evidence Library</span><b>Approved</b></button>
+        <button class="sideMenuItem" type="button" data-target="readiness"><span>Edge Runtime</span><b>Local</b></button>
+        <button class="sideMenuItem" type="button" data-target="readiness"><span>Audit Policy</span><b>Logged</b></button>
+      </aside>
+
+      <section class="configPanel" aria-label="Deployment profile">
+        <div class="panelHeading">
+          <h2>Deployment Profile</h2>
+          <span class="statusChip local">LOCAL</span>
+        </div>
+
+        <div class="fieldGroup activeGroup" id="siteProfile">
+          <h3>Site Profile</h3>
+          <div class="fieldRow"><div><span class="fieldLabel">Facility Type</span><span class="fieldValue">Combined-Cycle Power Plant</span></div><span class="statusChip locked">LOCKED</span></div>
+          <div class="fieldRow"><div><span class="fieldLabel">Unit</span><span class="fieldValue">Unit 3 / ST-3 Turbine Train</span></div><span class="statusChip approved">APPROVED</span></div>
+          <div class="fieldRow"><div><span class="fieldLabel">Operating Mode</span><span class="fieldValue">Full load, 412 MW</span></div></div>
+          <div class="fieldRow"><div><span class="fieldLabel">Critical Asset</span><span class="fieldValue">Cooling Water Pump CWP-2</span></div><span class="statusChip approved">IN SCOPE</span></div>
+        </div>
+
+        <div class="fieldGroup" id="otInputs">
+          <h3>Read-only OT Inputs</h3>
+          <div class="fieldRow"><div><span class="fieldLabel">Alarm Source</span><span class="fieldValue">SCADA alarm/event export</span></div><span class="statusChip readOnly">READ-ONLY</span></div>
+          <div class="fieldRow"><div><span class="fieldLabel">Historian Source</span><span class="fieldValue">Local historian snapshot</span></div><span class="statusChip local">LOCAL</span></div>
+          <div class="fieldRow"><div><span class="fieldLabel">Adapter</span><span class="fieldValue">OPC-UA / CSV import</span></div></div>
+          <div class="fieldRow blocked"><div><span class="fieldLabel">Control Write-back</span><span class="fieldValue">Disabled</span></div><span class="statusChip blocked">BLOCKED</span></div>
+        </div>
+
+        <div class="fieldGroup" id="approvedContext">
+          <h3>Approved Context</h3>
+          <div class="fieldRow"><div><span class="fieldLabel">Evidence Pack</span><span class="fieldValue">WO-2026-0871 · SOP-114 · INC-2024-031</span></div><span class="statusChip approved">APPROVED</span></div>
+          <div class="fieldRow"><div><span class="fieldLabel">Tag Pack</span><span class="fieldValue">CWP-2, CW Header, Lube Oil, Bearings, Vibration</span></div><span class="statusChip local">LOCAL</span></div>
+          <div class="fieldRow"><div><span class="fieldLabel">Retrieval Scope</span><span class="fieldValue">Approved local documents only</span></div><span class="statusChip locked">LOCKED</span></div>
+        </div>
+      </section>
+
+      <aside class="readinessPanel" id="readiness" aria-label="Readiness checklist">
+        <div class="panelHeading">
+          <h2>Readiness Checklist</h2>
+        </div>
+        <div class="checkRow"><span>✓</span><b>Site profile selected</b><em>Ready</em></div>
+        <div class="checkRow"><span>✓</span><b>OT source is read-only</b><em>Locked</em></div>
+        <div class="checkRow"><span>✓</span><b>Historian tag pack loaded</b><em>Loaded</em></div>
+        <div class="checkRow"><span>✓</span><b>Evidence library approved</b><em>Approved</em></div>
+        <div class="checkRow"><span>✓</span><b>Edge runtime local</b><em>Local</em></div>
+        <div class="checkRow"><span>✓</span><b>Audit logging enabled</b><em>On</em></div>
+        <div class="checkRow blocked"><span>!</span><b>PLC/DCS write-back blocked</b><em>Blocked</em></div>
+
+        <div class="safetyMiniPanel">
+          <h3>Safety Boundary</h3>
+          <p>Copilot can read alarms, historian tags, SOPs, and work orders.</p>
+          <div class="lockedList">
+            <span>Acknowledge alarms</span>
+            <span>Suppress alarms</span>
+            <span>Open valves</span>
+            <span>Trip equipment</span>
+            <span>Write to PLC/DCS</span>
+          </div>
+        </div>
+      </aside>
     </section>
 
-    <div class="boundaryStrip">AI can read alarms, tags, SOPs, and work orders. AI cannot acknowledge alarms, suppress alarms, open valves, trip equipment, or write back to PLC/DCS.</div>
-
-    <div class="ctaRow">
-      <button class="primaryCta" id="saveConfig">Save Configuration -> Start Alarm Storm</button>
+    <div class="ctaRow consoleCta">
+      <button class="primaryCta" id="saveConfig">Save Profile -> Start Alarm Storm</button>
     </div>
   </main>
 
   <script>
+    document.querySelectorAll(".sideMenuItem").forEach(function(item){
+      item.addEventListener("click", function(){
+        document.querySelectorAll(".sideMenuItem").forEach(function(row){ row.classList.remove("active"); });
+        item.classList.add("active");
+        document.querySelectorAll(".fieldGroup, .readinessPanel").forEach(function(panel){ panel.classList.remove("activeGroup"); });
+        var target = document.getElementById(item.dataset.target);
+        if(target){
+          target.classList.add("activeGroup");
+          target.scrollIntoView({behavior:"smooth", block:"center"});
+        }
+      });
+    });
+
     document.getElementById("saveConfig").addEventListener("click", function(){
       localStorage.setItem("siteConfigured", "true");
       window.location.href = "alarm_storm_demo.html";

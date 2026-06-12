@@ -16,88 +16,118 @@
     </div>
   </nav>
 
-  <main class="demoShell">
-    <section class="demoHero">
+  <main class="consoleShell governanceShell">
+    <section class="consoleHeader">
       <div>
-        <div class="heroKicker">Governance</div>
-        <h1>Governance Evidence</h1>
-        <p>Advisory-only, read-only, plant-local, and audit-ready by design.</p>
+        <div class="heroKicker">Assurance Panel</div>
+        <h1>Governance Console</h1>
+        <p>Review safety boundaries, audit evidence, and standards mapping.</p>
       </div>
+      <aside class="consoleStatus review">
+        <strong>ASSURANCE REVIEW READY</strong>
+        <span>Evidence for review · Customer validates</span>
+      </aside>
     </section>
 
-    <section>
-      <h2 class="heroKicker">Standards Mapping</h2>
-      <div class="cardGrid">
-        <article class="bigCard"><h3>ISA-18.2 / IEC 62682</h3><p>Flood detection, rationalized alarm evidence, monitoring &amp; assessment, audit support.</p></article>
-        <article class="bigCard"><h3>EEMUA 191</h3><p>Alarm flood visibility, bad-actor grouping, operator-load reduction.</p></article>
-        <article class="bigCard"><h3>IEC 62443 / NIST SP 800-82</h3><p>Read-only OT source, segmented edge runtime, no autonomous actuation.</p></article>
-        <article class="bigCard"><h3>NIST CSF 2.0 / NIS2 themes</h3><p>Incident timeline, response support, local evidence, reporting handover.</p></article>
-        <article class="bigCard"><h3>EU AI Act themes</h3><p>Human oversight, traceability, documentation, robustness, cybersecurity.</p></article>
+    <section class="operationalBoundary" aria-label="Operational boundary controls">
+      <div class="panelHeading">
+        <h2>Operational Boundary</h2>
+        <span class="statusChip locked">CONTROLLED</span>
       </div>
+      <div class="toggleGrid">
+        <button class="governanceToggle on active" type="button" data-detail="Read-only OT input is enforced at the adapter layer. The demo consumes alarm exports, historian snapshots, SOPs, and work orders only."><span></span><b>READ-ONLY OT INPUT</b><em>ON</em></button>
+        <button class="governanceToggle blocked" type="button" data-detail="PLC and DCS write-back paths are not implemented in this demo. The copilot cannot acknowledge, suppress, trip, open, close, or write control values."><span></span><b>PLC/DCS WRITE-BACK</b><em>BLOCKED</em></button>
+        <button class="governanceToggle off" type="button" data-detail="The demo runs from local static files. Incident reasoning uses deterministic fallback mode unless a local Ollama runtime is available."><span></span><b>CLOUD TRANSFER</b><em>OFF</em></button>
+        <button class="governanceToggle review" type="button" data-detail="Recommendations are advisory. Operators review evidence before acting through existing plant procedures and systems."><span></span><b>HUMAN APPROVAL</b><em>REQUIRED</em></button>
+        <button class="governanceToggle on" type="button" data-detail="The demo shows the audit evidence pattern: incident time, inputs, model mode, recommendation, operator decision state, and cited documents."><span></span><b>AUDIT LOGGING</b><em>ON</em></button>
+      </div>
+      <div class="controlDetail" id="controlDetail">Read-only OT input is enforced at the adapter layer. The demo consumes alarm exports, historian snapshots, SOPs, and work orders only.</div>
     </section>
 
-    <section style="margin-top:30px;">
-      <h2 class="heroKicker">Control Boundary Diagram</h2>
-      <div class="diagramFlow" aria-label="Read-only advisory flow">
-        <div class="flowNode">SCADA / Historian / SOPs</div>
-        <div class="flowArrow">-></div>
-        <div class="flowNode">Read-only Adapter</div>
-        <div class="flowArrow">-></div>
-        <div class="flowNode">Edge Incident Copilot</div>
-        <div class="flowArrow">-></div>
-        <div class="flowNode">Operator Review</div>
-        <div class="flowArrow">-></div>
-        <div class="flowNode">Local Audit Log</div>
+    <section class="governanceLayout" aria-label="Governance evidence console">
+      <div class="evidenceColumn">
+        <section class="configPanel compactPanel">
+          <div class="panelHeading"><h2>Control Evidence</h2></div>
+          <h3 class="subPanelTitle">Control Boundary</h3>
+          <div class="controlDiagram" aria-label="Read-only advisory control boundary">
+            <div>SCADA / Historian / SOPs</div>
+            <span>-></span>
+            <div>Read-only Adapter</div>
+            <span>-></span>
+            <div>Edge Incident Copilot</div>
+            <span>-></span>
+            <div>Operator Review</div>
+            <span>-></span>
+            <div>Local Audit Log</div>
+          </div>
+          <div class="blockedPath"><b>AI -> PLC/DCS write-back</b><span>Blocked by design</span></div>
+        </section>
+
+        <section class="configPanel compactPanel">
+          <div class="panelHeading"><h2>Sample Audit Record</h2><span class="statusChip local">LOCAL LOG</span></div>
+          <div class="auditRecord">
+            <div><b>Time</b><span>14:04:58</span></div>
+            <div><b>Incident</b><span>INC-2026-0610-A</span></div>
+            <div><b>Inputs</b><span>42 alarms · historian tags · 3 evidence docs</span></div>
+            <div><b>Recommendation</b><span>Advisory only</span></div>
+            <div><b>Operator decision</b><span>Pending review</span></div>
+            <div><b>Cloud calls</b><span>0</span></div>
+            <div><b>Model mode</b><span>Local demo mode</span></div>
+            <div><b>Evidence</b><span>WO-2026-0871 · SOP-114 · INC-2024-031</span></div>
+          </div>
+        </section>
       </div>
-      <div class="dangerBlocked">Blocked: AI -> PLC/DCS control write-back</div>
+
+      <aside class="configPanel matrixPanel">
+        <div class="panelHeading"><h2>Standards Mapping</h2><span class="statusChip review">FOR REVIEW</span></div>
+        <div class="governanceMatrix" role="table" aria-label="Standards mapping">
+          <div class="matrixRow head" role="row"><b>Theme</b><b>Mapped evidence</b><b>Status</b></div>
+          <div class="matrixRow" role="row"><b>Alarm Management</b><span>Flood grouping · incident timeline · evidence references</span><em>Demo implemented</em></div>
+          <div class="matrixRow" role="row"><b>OT Cybersecurity</b><span>Read-only source · segmented edge runtime · no write-back</span><em>Design control</em></div>
+          <div class="matrixRow" role="row"><b>Cyber Risk Governance</b><span>Local audit log · incident handover · response support</span><em>Supports process</em></div>
+          <div class="matrixRow" role="row"><b>AI Governance</b><span>Human oversight · traceability · model/runtime logging</span><em>Design control</em></div>
+          <div class="matrixRow" role="row"><b>Customer Responsibility</b><span>Alarm philosophy · MOC · safety procedures · reporting workflow</span><em>Customer validates</em></div>
+        </div>
+      </aside>
     </section>
 
-    <section style="margin-top:30px;">
-      <h2 class="heroKicker">Sample Audit Log</h2>
-      <div class="auditCard">
-        <div class="auditItem"><b>Time</b>14:04:58</div>
-        <div class="auditItem"><b>Incident</b>INC-2026-0610-A</div>
-        <div class="auditItem"><b>Input</b>42 alarms + historian tags + 3 evidence docs</div>
-        <div class="auditItem"><b>Recommendation</b>Advisory only</div>
-        <div class="auditItem"><b>Operator decision</b>Pending review</div>
-        <div class="auditItem"><b>Cloud calls</b>0</div>
-        <div class="auditItem"><b>Model mode</b>Local demo mode</div>
-        <div class="auditItem"><b>Evidence</b>WO-2026-0871 · SOP-114 · INC-2024-031</div>
-      </div>
-    </section>
-
-    <section style="margin-top:30px;">
-      <h2 class="heroKicker">Demo vs Customer Responsibility</h2>
-      <div class="twoCol">
-        <article class="bigCard">
+    <section class="responsibilityPanel">
+      <div class="panelHeading"><h2>Demo vs Production Responsibility</h2></div>
+      <div class="responsibilityGrid">
+        <div>
           <h3>Demo shows</h3>
-          <ul>
-            <li>Alarm flood compression</li>
-            <li>Evidence citation</li>
-            <li>Local edge runtime</li>
-            <li>Human approval workflow</li>
-            <li>Audit trail concept</li>
-          </ul>
-        </article>
-        <article class="bigCard">
+          <span>Alarm flood compression</span>
+          <span>Evidence citation</span>
+          <span>Human review workflow</span>
+          <span>Local edge runtime</span>
+          <span>Audit trail concept</span>
+        </div>
+        <div>
           <h3>Customer validates</h3>
-          <ul>
-            <li>Alarm philosophy</li>
-            <li>Management of change</li>
-            <li>Safety procedures</li>
-            <li>Regulatory reporting process</li>
-            <li>Production cybersecurity controls</li>
-          </ul>
-        </article>
+          <span>Alarm philosophy</span>
+          <span>Management of change</span>
+          <span>Safety procedures</span>
+          <span>Cybersecurity controls</span>
+          <span>Regulatory reporting process</span>
+        </div>
       </div>
     </section>
 
-    <div class="closeStatement">Edge Incident Copilot does not control the plant. It helps operators understand, document, and respond faster.</div>
+    <div class="closeStatement consoleClose">Edge Incident Copilot does not control the plant. It helps operators understand, document, and respond faster.</div>
 
-    <div class="ctaRow">
+    <div class="ctaRow consoleCta">
       <a class="secondaryCta" href="alarm_storm_demo.html">Back to Alarm Storm</a>
       <a class="primaryCta" href="configure_site.html">Restart Demo</a>
     </div>
   </main>
+  <script>
+    document.querySelectorAll(".governanceToggle").forEach(function(toggle){
+      toggle.addEventListener("click", function(){
+        document.querySelectorAll(".governanceToggle").forEach(function(item){ item.classList.remove("active"); });
+        toggle.classList.add("active");
+        document.getElementById("controlDetail").textContent = toggle.dataset.detail;
+      });
+    });
+  </script>
 </body>
 </html>
