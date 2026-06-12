@@ -1145,3 +1145,134 @@ body.demoPage{
 @media (max-width:1300px){
   .governanceShell .evidenceColumn{grid-template-columns:1fr;}
 }
+
+/* TUM theme pass. Color source: lnksz TUM color gist, using TUM Blue/DarkBlue/LightBlue plus restrained emphasis colors. */
+:root{
+  --demo-bg:#06111f;
+  --demo-bg-2:#072140;
+  --demo-panel:#0a2d57;
+  --demo-panel-2:#0e396e;
+  --demo-line:#14519a;
+  --demo-line-soft:#0f3a66;
+  --demo-text:#f0f5fa;
+  --demo-muted:#c2d7ef;
+  --demo-blue:#0065bd;
+  --demo-green:#a2ad00;
+  --demo-red:#e37222;
+  --demo-orange:#e37222;
+  --demo-yellow:#fed702;
+  --demo-shadow:0 24px 70px rgba(0,0,0,.34);
+}
+body.demoPage,
+body.presentationPage{
+  background:
+    radial-gradient(circle at 12% -8%, rgba(100,160,200,.24), transparent 34%),
+    radial-gradient(circle at 88% 2%, rgba(0,101,189,.18), transparent 30%),
+    linear-gradient(180deg,#072140 0%,#06111f 68%,#020912 100%);
+}
+body.demoPage::before,
+body.presentationPage::before{opacity:.12;}
+.demoNav{background:rgba(7,33,64,.94); border-bottom-color:rgba(100,160,200,.24);}
+.demoBrand{color:#ffffff;}
+.stepPill{background:#0a2d57; border-color:#5e94d4; color:#d7e4f4;}
+.stepPill.active{background:#0065bd; border-color:#98c6ea; color:#ffffff; box-shadow:0 0 0 4px rgba(0,101,189,.22);}
+.heroKicker{color:#64a0c8;}
+.primaryCta{background:#0065bd; border-color:#98c6ea; color:#ffffff;}
+.secondaryCta{background:#0a2d57; border-color:#5e94d4; color:#f0f5fa;}
+.consoleStatus{border-color:rgba(162,173,0,.78); background:linear-gradient(180deg,rgba(36,55,44,.86),rgba(7,33,64,.96));}
+.consoleStatus strong{color:#e9f1cb;}
+.consoleStatus.review{border-color:rgba(100,160,200,.85); background:linear-gradient(180deg,rgba(10,45,87,.96),rgba(7,33,64,.96));}
+.consoleStatus.review strong{color:#ffffff;}
+.sideMenu,.configPanel,.readinessPanel,.operationalBoundary,.responsibilityPanel{background:linear-gradient(180deg,rgba(10,45,87,.96),rgba(7,33,64,.98)); border-color:rgba(94,148,212,.55);}
+.sideMenuItem,.fieldRow,.auditRecord div,.responsibilityGrid > div,.controlDiagram div,.governanceMatrix,.matrixRow{background:rgba(6,17,31,.76); border-color:rgba(94,148,212,.38);}
+.sideMenuItem.active{border-color:#64a0c8; background:linear-gradient(90deg,rgba(0,101,189,.38),rgba(6,17,31,.92)); box-shadow:inset 4px 0 0 #64a0c8;}
+.sideMenuItem b,.checkRow em,.governanceToggle em{color:#d8e5a4;}
+.fieldValue,.checkRow b,.matrixRow b,.auditRecord span{color:#ffffff;}
+.statusChip.local,.statusChip.approved,.statusChip.readOnly{border-color:rgba(162,173,0,.85); background:rgba(56,69,19,.72); color:#e9f1cb;}
+.statusChip.locked,.statusChip.review{border-color:rgba(100,160,200,.85); background:rgba(10,45,87,.9); color:#d7e4f4;}
+.statusChip.blocked{border-color:rgba(227,114,34,.9); background:rgba(74,36,17,.75); color:#fce2b0;}
+.fieldRow.blocked{border-color:rgba(227,114,34,.75); background:rgba(74,36,17,.32);}
+.checkRow span{background:#384513; color:#e9f1cb;}
+.checkRow.blocked span{background:#4a2411; color:#fce2b0;}
+.compactSafety{border-color:rgba(100,160,200,.55); background:rgba(6,17,31,.72);}
+.safetyStatus b{color:#e9f1cb;}
+.governanceToggle{background:rgba(6,17,31,.78); border-color:rgba(94,148,212,.5); color:#f0f5fa;}
+.governanceToggle.active{border-color:#64a0c8; box-shadow:0 0 0 3px rgba(100,160,200,.18);}
+.governanceToggle.on span{background:#384513; border-color:#a2ad00;}
+.governanceToggle.on span::after{background:#e9f1cb;}
+.governanceToggle.blocked span,.governanceToggle.off span{background:#4a2411; border-color:#e37222;}
+.governanceToggle.blocked span::after,.governanceToggle.off span::after{background:#fce2b0;}
+.governanceToggle.review span{background:#0e396e; border-color:#64a0c8;}
+.governanceToggle.review span::after{background:#c2d7ef;}
+.governanceToggle.blocked em,.governanceToggle.off em{color:#fce2b0;}
+.governanceToggle.review em{color:#c2d7ef;}
+.controlDetail{background:rgba(6,17,31,.82); border-color:rgba(94,148,212,.45); color:#d7e4f4;}
+.blockedPath{background:rgba(74,36,17,.42); border-color:rgba(227,114,34,.82);}
+.blockedPath b{color:#fce2b0;}
+.blockedPath span{color:#fed702;}
+
+/* Config visuals. */
+.fieldGroupHeader{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 116px;
+  gap:12px;
+  align-items:center;
+  margin-bottom:10px;
+}
+.fieldGroupHeader h3{margin:0;}
+.fieldGroupHeader img{
+  width:116px;
+  height:76px;
+  object-fit:cover;
+  border:1px solid rgba(100,160,200,.5);
+  background:#06111f;
+}
+.configurePage .fieldGroupHeader{grid-template-columns:minmax(0,1fr) 96px;}
+.configurePage .fieldGroupHeader img{width:96px; height:62px;}
+
+/* Governance requested layout: low-noise 55/45 console body. */
+.governanceTwoCol{
+  grid-template-columns:minmax(0,55fr) minmax(460px,45fr) !important;
+  gap:16px;
+}
+.governanceTwoCol .evidenceColumn{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+}
+.compactMapping{padding:20px;}
+.mappingList{display:grid; gap:10px;}
+.mappingList div{
+  display:grid;
+  grid-template-columns:190px minmax(0,1fr);
+  gap:12px;
+  align-items:center;
+  min-height:58px;
+  padding:10px 12px;
+  border:1px solid rgba(94,148,212,.38);
+  background:rgba(6,17,31,.76);
+}
+.mappingList b{color:#ffffff; font-size:17px; line-height:1.15;}
+.mappingList span{color:#c2d7ef; font-size:16px; line-height:1.2;}
+.responsibilityBar{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:14px;
+}
+.responsibilityBar div{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  gap:14px;
+  align-items:center;
+  min-height:58px;
+  padding:12px 14px;
+  border:1px solid rgba(94,148,212,.48);
+  background:rgba(10,45,87,.82);
+}
+.responsibilityBar b{color:#ffffff; font-size:18px; text-transform:uppercase; letter-spacing:.06em;}
+.responsibilityBar span{color:#c2d7ef; font-size:17px;}
+@media (max-width:1300px){
+  .governanceTwoCol{grid-template-columns:1fr !important;}
+  .responsibilityBar{grid-template-columns:1fr;}
+}

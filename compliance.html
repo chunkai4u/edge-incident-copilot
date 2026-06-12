@@ -19,13 +19,13 @@
   <main class="consoleShell governanceShell">
     <section class="consoleHeader">
       <div>
-        <div class="heroKicker">Assurance Panel</div>
+        <div class="heroKicker">Step 3</div>
         <h1>Governance Console</h1>
-        <p>Review safety boundaries and audit evidence.</p>
+        <p>Review safety boundary and audit evidence.</p>
       </div>
       <aside class="consoleStatus review">
-        <strong>ASSURANCE REVIEW READY</strong>
-        <span>Evidence for review · Customer validates</span>
+        <strong>ASSURANCE READY</strong>
+        <span>5/5 controls enforced · customer validates</span>
       </aside>
     </section>
 
@@ -44,7 +44,7 @@
       <div class="controlDetail" id="controlDetail">Read-only OT input is enforced at the adapter layer. The demo consumes alarm exports, historian snapshots, SOPs, and work orders only.</div>
     </section>
 
-    <section class="governanceLayout" aria-label="Governance evidence console">
+    <section class="governanceLayout governanceTwoCol" aria-label="Governance evidence console">
       <div class="evidenceColumn">
         <section class="configPanel compactPanel">
           <div class="panelHeading"><h2>Control Evidence</h2></div>
@@ -78,10 +78,25 @@
         </section>
       </div>
 
+      <aside class="configPanel matrixPanel compactMapping">
+        <div class="panelHeading"><h2>Standards Mapping</h2></div>
+        <div class="mappingList" aria-label="Standards mapping">
+          <div><b>Alarm Management</b><span>Flood grouping · timeline · evidence</span></div>
+          <div><b>OT Cybersecurity</b><span>Read-only source · no write-back</span></div>
+          <div><b>Cyber Risk Governance</b><span>Audit log · handover support</span></div>
+          <div><b>AI Governance</b><span>Human oversight · traceability</span></div>
+          <div><b>Customer Responsibility</b><span>Alarm philosophy · MOC · procedures</span></div>
+        </div>
+      </aside>
 
     </section>
 
 
+
+    <section class="responsibilityBar" aria-label="Demo and customer responsibility">
+      <div><b>Demo shows</b><span>Alarm compression · evidence citation · audit trail</span></div>
+      <div><b>Customer validates</b><span>Alarm philosophy · MOC · safety process</span></div>
+    </section>
 
     <div class="ctaRow consoleCta">
       <a class="secondaryCta" href="alarm_storm_demo.html">Back to Alarm Storm</a>
