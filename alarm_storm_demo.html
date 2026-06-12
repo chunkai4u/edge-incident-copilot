@@ -433,6 +433,21 @@
   }
   .secondaryReport b{color:#aeb8c2;}
 
+  .configurePage .profileVisualRow{
+    grid-template-columns:minmax(0,1fr) auto 190px;
+    min-height:132px;
+  }
+
+  @media (max-width:1500px){
+    .configurePage .profileVisualRow{grid-template-columns:minmax(0,1fr) auto 160px;}
+  }
+
+  @media (max-width:1180px){
+    .configurePage .profileVisualRow{grid-template-columns:1fr;}
+    .configurePage .profileFieldVisual{width:100%; max-width:260px;}
+    .configurePage .profileVisualRow .statusChip{justify-self:start;}
+  }
+
   @media (max-width:1100px){
     .toolbar{grid-template-columns:1fr 1fr 1fr;}
     .stats{grid-column:1 / -1; justify-self:stretch; grid-template-columns:repeat(3,1fr);}

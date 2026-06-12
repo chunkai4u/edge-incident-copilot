@@ -1213,22 +1213,9 @@ body.presentationPage::before{opacity:.12;}
 
 /* Config visuals. */
 .fieldGroupHeader{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 116px;
-  gap:12px;
-  align-items:center;
   margin-bottom:10px;
 }
 .fieldGroupHeader h3{margin:0;}
-.fieldGroupHeader img{
-  width:116px;
-  height:76px;
-  object-fit:cover;
-  border:1px solid rgba(100,160,200,.5);
-  background:#06111f;
-}
-.configurePage .fieldGroupHeader{grid-template-columns:minmax(0,1fr) 96px;}
-.configurePage .fieldGroupHeader img{width:96px; height:62px;}
 
 /* Governance requested layout: low-noise 55/45 console body. */
 .governanceTwoCol{
@@ -1278,27 +1265,27 @@ body.presentationPage::before{opacity:.12;}
 }
 
 /* Visibility pass: larger config visuals. */
-.fieldGroupHeader{
-  grid-template-columns:minmax(0,1fr) 220px;
-  gap:18px;
+.configurePage .fieldRow{min-height:52px;}
+.configurePage .profileVisualRow{
+  grid-template-columns:minmax(0,1fr) 190px auto;
+  min-height:132px;
 }
-.fieldGroupHeader img{
-  width:220px;
-  height:150px;
+.profileFieldVisual{
+  width:190px;
+  height:108px;
   object-fit:cover;
-  border-color:rgba(152,198,234,.72);
+  border:1px solid rgba(152,198,234,.72);
+  background:#06111f;
   box-shadow:0 10px 26px rgba(0,0,0,.26);
 }
-.configurePage .fieldGroupHeader{grid-template-columns:minmax(0,1fr) 190px;}
-.configurePage .fieldGroupHeader img{width:190px; height:126px;}
-.configurePage .fieldRow{min-height:52px;}
 @media (max-width:1500px){
-  .configurePage .fieldGroupHeader{grid-template-columns:minmax(0,1fr) 160px;}
-  .configurePage .fieldGroupHeader img{width:160px; height:106px;}
+  .configurePage .profileVisualRow{grid-template-columns:minmax(0,1fr) 160px auto;}
+  .profileFieldVisual{width:160px; height:96px;}
 }
 @media (max-width:1180px){
-  .configurePage .fieldGroupHeader{grid-template-columns:1fr;}
-  .configurePage .fieldGroupHeader img{width:min(100%,520px); height:auto; aspect-ratio:16/9;}
+  .configurePage .profileVisualRow{grid-template-columns:1fr;}
+  .profileFieldVisual{width:min(100%,520px); height:auto; aspect-ratio:16/9;}
+  .configurePage .profileVisualRow .statusChip{justify-self:start;}
 }
 
 /* TUM theme for the existing alarm storm page. CSS-only: preserves all IDs and JS behavior. */
