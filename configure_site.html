@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Configure Site - Edge Incident Copilot</title>
+<link rel="stylesheet" href="demo.css">
+</head>
+<body class="demoPage">
+  <nav class="demoNav" aria-label="Demo flow">
+    <div class="demoBrand">Edge Incident Copilot</div>
+    <div class="demoSteps">
+      <a class="stepPill active" href="configure_site.html">Configure Site</a>
+      <a class="stepPill" href="alarm_storm_demo.html">Live Alarm Storm</a>
+      <a class="stepPill" href="compliance.html">Governance Evidence</a>
+    </div>
+  </nav>
+
+  <main class="demoShell">
+    <section class="demoHero">
+      <div>
+        <div class="heroKicker">Site Context</div>
+        <h1>Configure the Local Operating Context</h1>
+        <p>Read-only alarms, historian tags, SOPs, and work orders. No cloud transfer. No control write-back.</p>
+      </div>
+    </section>
+
+    <section class="cardGrid" aria-label="Site configuration">
+      <article class="bigCard">
+        <h2>Facility Profile</h2>
+        <ul>
+          <li>Facility: Combined-Cycle Power Plant</li>
+          <li>Unit: Unit 3 / ST-3 Turbine Train</li>
+          <li>Operating mode: Full load, 412 MW</li>
+          <li>Critical asset: Cooling Water Pump CWP-2</li>
+        </ul>
+      </article>
+      <article class="bigCard">
+        <h2>Read-only OT Sources</h2>
+        <ul>
+          <li>SCADA alarm/event export</li>
+          <li>Historian tag snapshot</li>
+          <li>OPC-UA / CSV adapter</li>
+          <li>Write-back: DISABLED</li>
+        </ul>
+      </article>
+      <article class="bigCard">
+        <h2>Historian Tag Pack</h2>
+        <ul>
+          <li>CWP-2-MTR</li>
+          <li>CWP-2-FLW</li>
+          <li>CW-HDR-PRS</li>
+          <li>LO-TMP</li>
+          <li>BRG-2-TMP</li>
+          <li>VIB-ST3</li>
+          <li>ST3-TRIP</li>
+        </ul>
+      </article>
+      <article class="bigCard">
+        <h2>Approved Evidence Library</h2>
+        <ul>
+          <li>WO-2026-0871 CWP-2 deferred maintenance</li>
+          <li>SOP-114 Turbine trip recovery</li>
+          <li>INC-2024-031 Similar past incident</li>
+        </ul>
+      </article>
+      <article class="bigCard">
+        <h2>Edge AI Runtime</h2>
+        <ul>
+          <li>Local incident model</li>
+          <li>Ollama if available</li>
+          <li>Deterministic fallback mode</li>
+          <li>Plant-local inference</li>
+          <li>Cloud calls: 0</li>
+        </ul>
+      </article>
+      <article class="bigCard">
+        <h2>Retention &amp; Audit</h2>
+        <ul>
+          <li>Local incident logs: 30 days</li>
+          <li>Operator decisions recorded</li>
+          <li>Model/runtime mode logged</li>
+          <li>Evidence citations preserved</li>
+        </ul>
+      </article>
+    </section>
+
+    <div class="boundaryStrip">AI can read alarms, tags, SOPs, and work orders. AI cannot acknowledge alarms, suppress alarms, open valves, trip equipment, or write back to PLC/DCS.</div>
+
+    <div class="ctaRow">
+      <button class="primaryCta" id="saveConfig">Save Configuration -> Start Alarm Storm</button>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById("saveConfig").addEventListener("click", function(){
+      localStorage.setItem("siteConfigured", "true");
+      window.location.href = "alarm_storm_demo.html";
+    });
+  </script>
+</body>
+</html>

@@ -2,11 +2,34 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=alarm_storm_demo.html">
-<link rel="canonical" href="alarm_storm_demo.html">
-<title>Edge Incident Copilot — Live Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edge Incident Copilot - Live Demo</title>
+<link rel="stylesheet" href="demo.css">
 </head>
-<body style="margin:0;font-family:system-ui,Segoe UI,sans-serif;background:#0b0f14;color:#d7e1ec;display:flex;height:100vh;align-items:center;justify-content:center">
-  <p>Loading the demo… if it doesn't redirect, <a href="alarm_storm_demo.html" style="color:#3fb6ff">click here</a>.</p>
+<body class="demoPage">
+  <nav class="demoNav" aria-label="Demo flow">
+    <div class="demoBrand">Edge Incident Copilot</div>
+    <div class="demoSteps">
+      <a class="stepPill active" href="configure_site.html">Configure Site</a>
+      <a class="stepPill" href="alarm_storm_demo.html">Live Alarm Storm</a>
+      <a class="stepPill" href="compliance.html">Governance Evidence</a>
+    </div>
+  </nav>
+
+  <main class="demoShell">
+    <section class="demoHero">
+      <div>
+        <div class="heroKicker">Static control-room demo</div>
+        <h1>Offline incident copilot for alarm floods.</h1>
+        <p>An on-prem advisory layer that sits above SCADA, DCS, historians, SOPs, and work orders. It turns alarm chaos into one cited, operator-reviewed incident card.</p>
+      </div>
+    </section>
+
+    <div class="boundaryStrip">Demo boundary: the copilot reads local evidence only. It does not acknowledge alarms, suppress alarms, control equipment, or write back to PLC/DCS.</div>
+
+    <div class="ctaRow">
+      <a class="primaryCta" href="configure_site.html">Start Demo -> Configure Site</a>
+    </div>
+  </main>
 </body>
 </html>

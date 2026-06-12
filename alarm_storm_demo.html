@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>EdgeOps Control Room - Alarm Correlation Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Alarm Storm - Edge Incident Copilot</title>
 <style>
   :root{
     --bg:#070b0f;
@@ -449,15 +450,36 @@
     .chain li{grid-template-columns:64px 24px minmax(0,1fr);}
   }
 </style>
+<link rel="stylesheet" href="demo.css">
 
 </head>
-<body>
+<body class="alarmDemo">
 
-<div class="statusHooks" aria-hidden="true">
-  <span class="badge llm" id="llmBadge">EDGE LLM: checking…</span>
-  <span class="badge data" id="dataBadge">DATA: …</span>
+<nav class="demoNav" aria-label="Demo flow">
+  <div class="demoBrand">Edge Incident Copilot</div>
+  <div class="demoSteps">
+    <a class="stepPill" href="configure_site.html">Configure Site</a>
+    <a class="stepPill active" href="alarm_storm_demo.html">Live Alarm Storm</a>
+    <a class="stepPill" href="compliance.html">Governance Evidence</a>
+  </div>
+</nav>
+
+<div class="statusHooks statusHooksHidden" aria-hidden="true">
+  <span class="badge bigBadge safe">READ-ONLY</span>
+  <span class="badge bigBadge safe" id="llmBadge">EDGE LLM: checking...</span>
+  <span class="badge bigBadge data" id="dataBadge">DATA: ...</span>
+  <span class="badge bigBadge safe">CLOUD: 0 CALLS</span>
+  <span class="badge bigBadge warn">ADVISORY ONLY</span>
   <span class="clock" id="clock"></span>
 </div>
+
+<header class="alarmPageHero">
+  <div>
+    <div class="heroKicker">Live Incident</div>
+    <h1>Live Alarm Storm</h1>
+    <p>42 alarms in minutes. One cited incident card.</p>
+  </div>
+</header>
 
 <div class="toolbar">
   <button id="btnStorm">Start Storm</button>
@@ -627,7 +649,7 @@ $("clock").textContent = new Date().toLocaleString();
 /* Detect local Ollama (optional) */
 fetch(OLLAMA_URL+"/api/tags",{signal:AbortSignal.timeout(1500)})
  .then(r=>r.ok?r.json():Promise.reject())
- .then(()=>{ llmOnline=true; $("llmBadge").textContent="EDGE LLM: OLLAMA · "+OLLAMA_MODEL; })
+ .then(()=>{ llmOnline=true; $("llmBadge").textContent="EDGE LLM: OLLAMA - "+OLLAMA_MODEL; })
  .catch(()=>{ $("llmBadge").textContent="EDGE LLM: LOCAL (DEMO MODE)"; });
 
 $("btnStorm").onclick = () => {
@@ -740,7 +762,13 @@ function renderResult(r, ms, llmNote){
       <ul class="actions">${r.actions.slice(0,4).map(a=>`<li>${a}</li>`).join("")}</ul>
     </div>
 
-    <div class="secondaryReport"><b>Evidence:</b> ${r.citations.map(c=>c[0]).join(" · ")} · <b>Mode:</b> on-device advisory · <b>Cloud:</b> 0 calls</div>
+    <div class="section">
+      <h3>Evidence</h3>
+      ${r.citations.map(c=>`<div class="cite"><b>${c[0]}</b> ${c[1]}</div>`).join("")}
+    </div>
+
+    <div class="secondaryReport"><b>Mode:</b> on-device advisory · <b>Cloud:</b> 0 calls · <b>Control write-back:</b> disabled</div>
+    <div class="resultCta"><a class="primaryCta" href="compliance.html">View Governance Evidence -></a></div>
   </div>`;
 }
 

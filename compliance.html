@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Governance Evidence - Edge Incident Copilot</title>
+<link rel="stylesheet" href="demo.css">
+</head>
+<body class="demoPage">
+  <nav class="demoNav" aria-label="Demo flow">
+    <div class="demoBrand">Edge Incident Copilot</div>
+    <div class="demoSteps">
+      <a class="stepPill" href="configure_site.html">Configure Site</a>
+      <a class="stepPill" href="alarm_storm_demo.html">Live Alarm Storm</a>
+      <a class="stepPill active" href="compliance.html">Governance Evidence</a>
+    </div>
+  </nav>
+
+  <main class="demoShell">
+    <section class="demoHero">
+      <div>
+        <div class="heroKicker">Governance</div>
+        <h1>Governance Evidence</h1>
+        <p>Advisory-only, read-only, plant-local, and audit-ready by design.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="heroKicker">Standards Mapping</h2>
+      <div class="cardGrid">
+        <article class="bigCard"><h3>ISA-18.2 / IEC 62682</h3><p>Flood detection, rationalized alarm evidence, monitoring &amp; assessment, audit support.</p></article>
+        <article class="bigCard"><h3>EEMUA 191</h3><p>Alarm flood visibility, bad-actor grouping, operator-load reduction.</p></article>
+        <article class="bigCard"><h3>IEC 62443 / NIST SP 800-82</h3><p>Read-only OT source, segmented edge runtime, no autonomous actuation.</p></article>
+        <article class="bigCard"><h3>NIST CSF 2.0 / NIS2 themes</h3><p>Incident timeline, response support, local evidence, reporting handover.</p></article>
+        <article class="bigCard"><h3>EU AI Act themes</h3><p>Human oversight, traceability, documentation, robustness, cybersecurity.</p></article>
+      </div>
+    </section>
+
+    <section style="margin-top:30px;">
+      <h2 class="heroKicker">Control Boundary Diagram</h2>
+      <div class="diagramFlow" aria-label="Read-only advisory flow">
+        <div class="flowNode">SCADA / Historian / SOPs</div>
+        <div class="flowArrow">-></div>
+        <div class="flowNode">Read-only Adapter</div>
+        <div class="flowArrow">-></div>
+        <div class="flowNode">Edge Incident Copilot</div>
+        <div class="flowArrow">-></div>
+        <div class="flowNode">Operator Review</div>
+        <div class="flowArrow">-></div>
+        <div class="flowNode">Local Audit Log</div>
+      </div>
+      <div class="dangerBlocked">Blocked: AI -> PLC/DCS control write-back</div>
+    </section>
+
+    <section style="margin-top:30px;">
+      <h2 class="heroKicker">Sample Audit Log</h2>
+      <div class="auditCard">
+        <div class="auditItem"><b>Time</b>14:04:58</div>
+        <div class="auditItem"><b>Incident</b>INC-2026-0610-A</div>
+        <div class="auditItem"><b>Input</b>42 alarms + historian tags + 3 evidence docs</div>
+        <div class="auditItem"><b>Recommendation</b>Advisory only</div>
+        <div class="auditItem"><b>Operator decision</b>Pending review</div>
+        <div class="auditItem"><b>Cloud calls</b>0</div>
+        <div class="auditItem"><b>Model mode</b>Local demo mode</div>
+        <div class="auditItem"><b>Evidence</b>WO-2026-0871 · SOP-114 · INC-2024-031</div>
+      </div>
+    </section>
+
+    <section style="margin-top:30px;">
+      <h2 class="heroKicker">Demo vs Customer Responsibility</h2>
+      <div class="twoCol">
+        <article class="bigCard">
+          <h3>Demo shows</h3>
+          <ul>
+            <li>Alarm flood compression</li>
+            <li>Evidence citation</li>
+            <li>Local edge runtime</li>
+            <li>Human approval workflow</li>
+            <li>Audit trail concept</li>
+          </ul>
+        </article>
+        <article class="bigCard">
+          <h3>Customer validates</h3>
+          <ul>
+            <li>Alarm philosophy</li>
+            <li>Management of change</li>
+            <li>Safety procedures</li>
+            <li>Regulatory reporting process</li>
+            <li>Production cybersecurity controls</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <div class="closeStatement">Edge Incident Copilot does not control the plant. It helps operators understand, document, and respond faster.</div>
+
+    <div class="ctaRow">
+      <a class="secondaryCta" href="alarm_storm_demo.html">Back to Alarm Storm</a>
+      <a class="primaryCta" href="configure_site.html">Restart Demo</a>
+    </div>
+  </main>
+</body>
+</html>
