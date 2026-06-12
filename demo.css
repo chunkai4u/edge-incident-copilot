@@ -1093,3 +1093,55 @@ body.demoPage{
   .configurePage .configLayout{grid-template-columns:1fr;}
   .configurePage .lockedList{grid-template-columns:1fr;}
 }
+
+/* Noise removal pass: keep only controls, evidence, and navigation. */
+.startShell{
+  position:relative;
+  z-index:1;
+  min-height:calc(100vh - 150px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px;
+}
+.startOnly{
+  min-width:min(720px, calc(100vw - 80px));
+  min-height:82px;
+  font-size:28px;
+}
+.compactSafety{
+  border-color:rgba(80,96,112,.8);
+  background:rgba(7,16,22,.82);
+}
+.safetyStatus{
+  display:grid;
+  gap:8px;
+}
+.safetyStatus b{
+  color:#bde8bd;
+  font-size:18px;
+  font-weight:950;
+  letter-spacing:.12em;
+}
+.safetyStatus span{
+  color:#d6e1e9;
+  font-size:16px;
+  font-weight:760;
+  line-height:1.25;
+}
+.governanceShell .governanceLayout{
+  grid-template-columns:1fr;
+}
+.governanceShell .evidenceColumn{
+  grid-template-columns:1fr 1fr;
+  align-items:start;
+}
+.governanceShell .consoleHeader{
+  margin-bottom:16px;
+}
+.governanceShell .operationalBoundary{
+  margin-bottom:14px;
+}
+@media (max-width:1300px){
+  .governanceShell .evidenceColumn{grid-template-columns:1fr;}
+}
