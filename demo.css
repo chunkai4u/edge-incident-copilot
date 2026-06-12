@@ -982,3 +982,114 @@ body.alarmDemo{
   .primaryCta::after{animation:none; display:none;}
   .sideMenuItem,.governanceToggle{transition:none;}
 }
+
+/* GitHub Pages / browser viewport fix: keep the configure console complete and visible. */
+body.demoPage{
+  overflow-x:hidden;
+}
+.configurePage .consoleShell{
+  width:min(1840px, calc(100vw - 40px));
+  padding:22px 0 28px;
+}
+.configurePage .consoleHeader{
+  grid-template-columns:minmax(0,1fr) 390px;
+  margin-bottom:16px;
+}
+.configurePage .consoleHeader h1{font-size:clamp(40px,3vw,50px);}
+.configurePage .consoleHeader p{font-size:20px;}
+.configurePage .consoleStatus{
+  min-height:78px;
+  padding:16px 18px;
+}
+.configurePage .consoleStatus strong{font-size:18px;}
+.configurePage .consoleStatus span{font-size:16px;}
+.configurePage .configLayout{
+  grid-template-columns:250px minmax(560px,1fr) 360px;
+  gap:14px;
+}
+.configurePage .sideMenu,
+.configurePage .configPanel,
+.configurePage .readinessPanel{
+  padding:16px;
+}
+.configurePage .sideMenu h2,
+.configurePage .panelHeading h2{font-size:22px;}
+.configurePage .sideMenuItem{
+  min-height:48px;
+  margin-bottom:8px;
+  padding:10px 12px;
+}
+.configurePage .sideMenuItem span{font-size:17px;}
+.configurePage .sideMenuItem b{font-size:12px;}
+.configurePage .panelHeading{margin-bottom:12px;}
+.configurePage .fieldGroup{
+  padding:10px 0 12px;
+}
+.configurePage .fieldGroup h3,
+.configurePage .safetyMiniPanel h3{
+  margin-bottom:8px;
+  font-size:14px;
+}
+.configurePage .fieldRow{
+  min-height:56px;
+  margin-bottom:7px;
+  padding:9px 11px;
+}
+.configurePage .fieldLabel{
+  margin-bottom:4px;
+  font-size:12px;
+}
+.configurePage .fieldValue{font-size:18px;}
+.configurePage .statusChip{
+  min-height:26px;
+  padding:5px 8px;
+  font-size:11px;
+}
+.configurePage .checkRow{
+  min-height:42px;
+  padding:7px 0;
+}
+.configurePage .checkRow span{
+  width:24px;
+  height:24px;
+  font-size:15px;
+}
+.configurePage .checkRow b{font-size:16px;}
+.configurePage .checkRow em{font-size:11px;}
+.configurePage .safetyMiniPanel{
+  margin-top:12px;
+  padding:12px;
+}
+.configurePage .safetyMiniPanel p{font-size:16px; margin-bottom:10px;}
+.configurePage .lockedList{
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+.configurePage .lockedList span{
+  min-height:30px;
+  padding:6px 8px;
+  font-size:14px;
+}
+.configurePage .consoleCta{
+  margin-top:14px;
+}
+.configurePage .primaryCta{
+  min-height:56px;
+  font-size:19px;
+}
+
+@media (max-width:1500px){
+  .configurePage .consoleShell{width:min(1460px, calc(100vw - 28px));}
+  .configurePage .configLayout{
+    grid-template-columns:220px minmax(500px,1fr) 330px;
+    gap:12px;
+  }
+  .configurePage .readinessPanel{grid-column:auto;}
+  .configurePage .sideMenuItem span{font-size:16px;}
+  .configurePage .fieldValue{font-size:17px;}
+  .configurePage .checkRow b{font-size:15px;}
+}
+@media (max-width:1180px){
+  .configurePage .configLayout{grid-template-columns:1fr;}
+  .configurePage .lockedList{grid-template-columns:1fr;}
+}
