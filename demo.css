@@ -1276,3 +1276,144 @@ body.presentationPage::before{opacity:.12;}
   .governanceTwoCol{grid-template-columns:1fr !important;}
   .responsibilityBar{grid-template-columns:1fr;}
 }
+
+/* Visibility pass: larger config visuals. */
+.fieldGroupHeader{
+  grid-template-columns:minmax(0,1fr) 220px;
+  gap:18px;
+}
+.fieldGroupHeader img{
+  width:220px;
+  height:150px;
+  object-fit:cover;
+  border-color:rgba(152,198,234,.72);
+  box-shadow:0 10px 26px rgba(0,0,0,.26);
+}
+.configurePage .fieldGroupHeader{grid-template-columns:minmax(0,1fr) 190px;}
+.configurePage .fieldGroupHeader img{width:190px; height:126px;}
+.configurePage .fieldRow{min-height:52px;}
+@media (max-width:1500px){
+  .configurePage .fieldGroupHeader{grid-template-columns:minmax(0,1fr) 160px;}
+  .configurePage .fieldGroupHeader img{width:160px; height:106px;}
+}
+@media (max-width:1180px){
+  .configurePage .fieldGroupHeader{grid-template-columns:1fr;}
+  .configurePage .fieldGroupHeader img{width:min(100%,520px); height:auto; aspect-ratio:16/9;}
+}
+
+/* TUM theme for the existing alarm storm page. CSS-only: preserves all IDs and JS behavior. */
+body.alarmDemo{
+  background:
+    radial-gradient(circle at 12% -12%, rgba(100,160,200,.23), transparent 34%),
+    radial-gradient(circle at 88% 0%, rgba(0,101,189,.18), transparent 30%),
+    linear-gradient(180deg,#072140 0%,#06111f 62%,#020912 100%) !important;
+}
+body.alarmDemo::before{opacity:.12;}
+.alarmDemo .toolbar{
+  background:rgba(7,33,64,.94);
+  border-bottom-color:rgba(94,148,212,.35);
+}
+.alarmDemo button{
+  background:linear-gradient(180deg,#0e396e,#0a2d57);
+  border-color:#5e94d4;
+  color:#f0f5fa;
+}
+.alarmDemo button:hover{border-color:#98c6ea; background:linear-gradient(180deg,#14519a,#0e396e);}
+.alarmDemo #btnStorm{
+  border-color:#98c6ea;
+  background:#0065bd;
+  color:#ffffff;
+}
+.alarmDemo #btnCorrelate{
+  border-color:#64a0c8;
+  color:#ffffff;
+}
+.alarmDemo #btnCorrelate.pulse{animation:tumPulse 1.3s infinite;}
+@keyframes tumPulse{0%,100%{box-shadow:0 0 0 0 rgba(100,160,200,.42);}50%{box-shadow:0 0 0 8px rgba(100,160,200,0);}}
+.alarmDemo .stats span,
+.alarmDemo .alarmPanel,
+.alarmDemo .incidentPanel,
+.alarmDemo .placeholder,
+.alarmDemo .spinner,
+.alarmDemo .card{
+  background:linear-gradient(180deg,rgba(10,45,87,.96),rgba(7,33,64,.98));
+  border-color:rgba(94,148,212,.48);
+}
+.alarmDemo .stats b,
+.alarmDemo .panelTitle,
+.alarmDemo .alarm .tag{color:#ffffff;}
+.alarmDemo .stats .alarmcount b{color:#fce2b0;}
+.alarmDemo .panelTitle{
+  background:linear-gradient(180deg,#0e396e,#0a2d57);
+  border-bottom-color:rgba(94,148,212,.55);
+}
+.alarmDemo #alarmList,
+.alarmDemo #incidentBody{background:linear-gradient(180deg,#06111f,#020912);}
+.alarmDemo .alarm{
+  background:rgba(6,17,31,.86);
+  border-color:rgba(94,148,212,.26);
+  border-left-color:#5e94d4;
+}
+.alarmDemo .alarm.CRITICAL{
+  background:linear-gradient(90deg,rgba(227,114,34,.44),rgba(6,17,31,.96));
+  border-left-color:#e37222;
+  border-color:rgba(227,114,34,.8);
+  box-shadow:0 0 0 1px rgba(227,114,34,.16);
+}
+.alarmDemo .alarm.CRITICAL .sev{color:#fce2b0;}
+.alarmDemo .alarm.HIGH{
+  background:linear-gradient(90deg,rgba(0,101,189,.34),rgba(6,17,31,.94));
+  border-left-color:#64a0c8;
+  border-color:rgba(100,160,200,.55);
+}
+.alarmDemo .alarm.HIGH .sev{color:#c2d7ef;}
+.alarmDemo .alarm.MEDIUM{
+  background:linear-gradient(90deg,rgba(162,173,0,.22),rgba(6,17,31,.94));
+  border-left-color:#a2ad00;
+  border-color:rgba(162,173,0,.42);
+}
+.alarmDemo .alarm.MEDIUM .sev{color:#e9f1cb;}
+.alarmDemo .alarm.LOW .sev{color:#98c6ea;}
+.alarmDemo .card h2{
+  background:linear-gradient(90deg,#0065bd,#0a2d57);
+  border-bottom-color:#5e94d4;
+  border-left-color:#64a0c8;
+  color:#ffffff;
+}
+.alarmDemo .card .meta,
+.alarmDemo .secondaryReport,
+.alarmDemo .resultCta{background:#06111f; border-color:rgba(94,148,212,.28); color:#c2d7ef;}
+.alarmDemo .rootcause{
+  border-color:#64a0c8;
+  border-left-color:#0065bd;
+  background:linear-gradient(90deg,rgba(0,101,189,.36),rgba(6,17,31,.98));
+  color:#ffffff;
+}
+.alarmDemo .rootcause b{color:#ffffff;}
+.alarmDemo .conf{
+  background:#0a2d57;
+  color:#d7e4f4;
+  border-color:#64a0c8;
+}
+.alarmDemo .chain::before{background:linear-gradient(180deg,#0065bd,#64a0c8 48%,#a2ad00);}
+.alarmDemo .chain .node{background:#64a0c8; box-shadow:0 0 0 2px rgba(100,160,200,.55);}
+.alarmDemo .chain li:first-child .node{background:#0065bd; box-shadow:0 0 0 3px rgba(0,101,189,.35),0 0 22px rgba(100,160,200,.28);}
+.alarmDemo .chain .event,
+.alarmDemo .cite{
+  background:rgba(6,17,31,.82);
+  border-color:rgba(94,148,212,.42);
+  border-left-color:#64a0c8;
+  color:#d7e4f4;
+}
+.alarmDemo .chain li:first-child .event{
+  background:linear-gradient(90deg,rgba(0,101,189,.36),rgba(6,17,31,.98));
+  border-color:#64a0c8;
+  border-left-color:#0065bd;
+  color:#ffffff;
+}
+.alarmDemo .actions li{
+  background:rgba(56,69,19,.42);
+  border-color:rgba(162,173,0,.55);
+  color:#e9f1cb;
+}
+.alarmDemo .actions li::before{background:#a2ad00;}
